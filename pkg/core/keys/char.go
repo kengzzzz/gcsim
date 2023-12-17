@@ -64,6 +64,7 @@ const (
 	Barbara
 	Beidou
 	Bennett
+	Charlotte
 	Chongyun
 	Cyno
 	Diluc
@@ -159,6 +160,7 @@ var charNames = []string{
 	"barbara",
 	"beidou",
 	"bennett",
+	"charlotte",
 	"chongyun",
 	"cyno",
 	"diluc",
@@ -253,6 +255,7 @@ var charPrettyName = []string{
 	"Barbara",
 	"Beidou",
 	"Bennett",
+	"Charlotte",
 	"Chongyun",
 	"Cyno",
 	"Diluc",
@@ -343,6 +346,7 @@ var CharKeyToEle = map[Char]attributes.Element{
 	Barbara:          attributes.Hydro,
 	Beidou:           attributes.Electro,
 	Bennett:          attributes.Pyro,
+	Charlotte:        attributes.Cryo,
 	Chongyun:         attributes.Cryo,
 	Cyno:             attributes.Electro,
 	Diluc:            attributes.Pyro,
