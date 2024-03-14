@@ -62,7 +62,7 @@ const normalHitNum = 6
 func init() {
 	attackFrames = make([][]int, normalHitNum)
 
-	attackFrames[0] = frames.InitNormalCancelSlice(attackHitmarks[0][1], 26)
+	attackFrames[0] = frames.InitNormalCancelSlice(attackHitmarks[0][0], 26)
 	attackFrames[0][action.ActionAttack] = 25
 
 	attackFrames[1] = frames.InitNormalCancelSlice(attackHitmarks[1][0], 27)
