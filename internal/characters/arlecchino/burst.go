@@ -8,14 +8,14 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/combat"
 )
 
-const burstHitmarks = 146
+const burstHitmarks = 130
 
 var (
 	burstFrames []int
 )
 
 func init() {
-	burstFrames = frames.InitAbilSlice(130)
+	burstFrames = frames.InitAbilSlice(146)
 }
 
 func (c *char) Burst(p map[string]int) (action.Info, error) {
