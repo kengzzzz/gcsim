@@ -143,4 +143,5 @@ func (c *char) nourishingCinders() {
 	})
 	c.AddStatus(directiveLimitKey, 20*60, true)
 	c.skillDebtMax = 0.8 * c.MaxHP()
+	c.skillDebt = 0
 }
