@@ -15,18 +15,16 @@ import (
 var skillFrames []int
 
 const (
-	spikeHitmark      = 30
-	finalHitmark      = 90
+	spikeHitmark      = 10
+	finalHitmark      = 37
 	particleICDKey    = "arlecchino-particle-icd"
 	directiveLimitKey = "directive-limit"
 	directiveKey      = "directive"
 	directiveSrcKey   = "directive-src"
-
-	skillDebtMaxRatio = 0.8
 )
 
 func init() {
-	skillFrames = frames.InitAbilSlice(106)
+	skillFrames = frames.InitAbilSlice(37)
 }
 
 func (c *char) Skill(p map[string]int) (action.Info, error) {
