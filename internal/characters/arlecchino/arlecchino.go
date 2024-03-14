@@ -3,6 +3,7 @@ package arlecchino
 import (
 	tmpl "github.com/genshinsim/gcsim/internal/template/character"
 	"github.com/genshinsim/gcsim/pkg/core"
+	"github.com/genshinsim/gcsim/pkg/core/action"
 	"github.com/genshinsim/gcsim/pkg/core/info"
 	"github.com/genshinsim/gcsim/pkg/core/keys"
 	"github.com/genshinsim/gcsim/pkg/core/player/character"
@@ -42,6 +43,13 @@ func (c *char) Init() error {
 	c.a1OnKill()
 	c.a4()
 	return nil
+}
+func (c *char) NextQueueItemIsValid(a action.Action, p map[string]int) error {
+	// can use charge without attack beforehand unlike most of the other polearm users
+	if a == action.ActionCharge {
+		return nil
+	}
+	return c.Character.NextQueueItemIsValid(a, p)
 }
 
 func (c *char) AnimationStartDelay(k model.AnimationDelayKey) int {
