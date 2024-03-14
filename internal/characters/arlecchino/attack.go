@@ -10,7 +10,9 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/combat"
 	"github.com/genshinsim/gcsim/pkg/core/event"
 	"github.com/genshinsim/gcsim/pkg/core/geometry"
+	"github.com/genshinsim/gcsim/pkg/core/glog"
 	"github.com/genshinsim/gcsim/pkg/core/player/character"
+	"github.com/genshinsim/gcsim/pkg/core/targets"
 	"github.com/genshinsim/gcsim/pkg/modifier"
 )
 
@@ -57,6 +59,7 @@ var (
 )
 
 const naBuffKey = "in-praise-of-shadows"
+const bloodDebtConsumeICDKey = "blooddebt-consume-icd"
 const normalHitNum = 6
 
 func init() {
@@ -87,6 +90,9 @@ func (c *char) naBuff() {
 		if target != c.Index {
 			return false
 		}
+		c.Core.Log.NewEvent("Bond of Life changed", glog.LogCharacterEvent, c.Index).
+			Write("arle_hp_debt", c.CurrentHPDebt()).
+			Write("arle_hp_debt%", c.CurrentHPDebt()/c.MaxHP())
 		if c.CurrentHPDebt() >= c.MaxHP()*0.3 {
 			// can't use negative duration or else `if .arlecchino.status.in-praise-of-shadows` won't work
 			c.AddStatus(naBuffKey, 999999, false)
@@ -110,8 +116,6 @@ func (c *char) naBuff() {
 	})
 }
 
-// Normal attack damage queue generator
-// relatively standard with no major differences versus other characters
 func (c *char) Attack(p map[string]int) (action.Info, error) {
 	for i, mult := range attack[c.NormalCounter] {
 		ai := combat.AttackInfo{
@@ -137,7 +141,7 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 			ai.IgnoreInfusion = true
 			ai.FlatDmg += blooddebt[c.TalentLvlAttack()] * c.CurrentHPDebt() / c.MaxHP() * c.getTotalAtk()
 			c.QueueCharTask(func() {
-				c.ModifyHPDebtByAmount(-0.055 * c.CurrentHPDebt())
+
 			}, attackHitmarks[c.NormalCounter][i]+1)
 		}
 
@@ -159,7 +163,7 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 		}
 
 		c.QueueCharTask(func() {
-			c.Core.QueueAttack(ai, ap, 0, 0)
+			c.Core.QueueAttack(ai, ap, 0, 0, c.bloodDebtConsumeCB)
 		}, attackHitmarks[c.NormalCounter][i])
 	}
 
@@ -176,4 +180,15 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 func (c *char) getTotalAtk() float64 {
 	stats, _ := c.Stats()
 	return c.Base.Atk*(1+stats[attributes.ATKP]) + stats[attributes.ATK]
+}
+
+func (c *char) bloodDebtConsumeCB(a combat.AttackCB) {
+	if a.Target.Type() != targets.TargettableEnemy {
+		return
+	}
+	if c.StatusIsActive(bloodDebtConsumeICDKey) {
+		return
+	}
+	c.AddStatus(bloodDebtConsumeICDKey, 0.05*60, true)
+	c.ModifyHPDebtByAmount(-0.055 * c.CurrentHPDebt())
 }
