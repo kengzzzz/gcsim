@@ -3,7 +3,7 @@ key: "arlecchino"
 rarity: QUALITY_ORANGE
 body: BODY_LADY
 region: ASSOC_TYPE_FATUI
-element: Ice
+element: Fire
 weapon_class: WEAPON_POLE
 icon_name: "UI_AvatarIcon_Arlecchino"
 stats: {
