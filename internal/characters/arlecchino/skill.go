@@ -15,7 +15,7 @@ import (
 var skillFrames []int
 
 const (
-	spikeHitmark      = 10
+	spikeHitmark      = 14
 	finalHitmark      = 37
 	particleICDKey    = "arlecchino-particle-icd"
 	directiveLimitKey = "directive-limit"
@@ -43,15 +43,16 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 	c.Core.QueueAttack(ai, skillArea, spikeHitmark, spikeHitmark)
 
 	ai = combat.AttackInfo{
-		ActorIndex: c.Index,
-		Abil:       "All is Ash (Final)",
-		AttackTag:  attacks.AttackTagElementalArt,
-		ICDTag:     attacks.ICDTagNone,
-		ICDGroup:   attacks.ICDGroupDefault,
-		StrikeType: attacks.StrikeTypeDefault,
-		Element:    attributes.Pyro,
-		Durability: 25,
-		Mult:       skillFinal[c.TalentLvlSkill()],
+		ActorIndex:         c.Index,
+		Abil:               "All is Ash (Final)",
+		AttackTag:          attacks.AttackTagElementalArt,
+		ICDTag:             attacks.ICDTagNone,
+		ICDGroup:           attacks.ICDGroupDefault,
+		StrikeType:         attacks.StrikeTypeDefault,
+		Element:            attributes.Pyro,
+		Durability:         25,
+		CanBeDefenseHalted: true,
+		Mult:               skillFinal[c.TalentLvlSkill()],
 	}
 
 	skillArea = combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 3)
