@@ -31,6 +31,7 @@ func (c *char) ChargeAttack(p map[string]int) (action.Info, error) {
 			StrikeType:         attacks.StrikeTypeSpear,
 			Element:            attributes.Physical,
 			Durability:         25,
+			HitlagHaltFrames:   0.02,
 			HitlagFactor:       0.01,
 			CanBeDefenseHalted: true,
 			Mult:               charge[c.TalentLvlAttack()],
