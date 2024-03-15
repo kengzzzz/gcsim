@@ -10,10 +10,10 @@ import (
 
 var chargeFrames []int
 
-const chargeHitmark = 24
+const chargeHitmark = 34
 
 func init() {
-	chargeFrames = frames.InitAbilSlice(50)
+	chargeFrames = frames.InitAbilSlice(59)
 	chargeFrames[action.ActionDash] = chargeHitmark
 	chargeFrames[action.ActionJump] = chargeHitmark
 }
@@ -33,7 +33,6 @@ func (c *char) ChargeAttack(p map[string]int) (action.Info, error) {
 			Durability:         25,
 			HitlagFactor:       0.01,
 			CanBeDefenseHalted: true,
-			IsDeployable:       true,
 			Mult:               charge[c.TalentLvlAttack()],
 		}
 
