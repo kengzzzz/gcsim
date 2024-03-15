@@ -134,15 +134,11 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 		}
 
 		naIndex := 0
-
 		if c.StatusIsActive(naBuffKey) {
 			naIndex = 1
 			ai.Element = attributes.Pyro
 			ai.IgnoreInfusion = true
 			ai.FlatDmg += blooddebt[c.TalentLvlAttack()] * c.CurrentHPDebt() / c.MaxHP() * c.getTotalAtk()
-			c.QueueCharTask(func() {
-
-			}, attackHitmarks[c.NormalCounter][i]+1)
 		}
 
 		var ap combat.AttackPattern
@@ -187,6 +183,9 @@ func (c *char) bloodDebtConsumeCB(a combat.AttackCB) {
 		return
 	}
 	if c.StatusIsActive(bloodDebtConsumeICDKey) {
+		return
+	}
+	if !c.StatusIsActive(naBuffKey) {
 		return
 	}
 	c.AddStatus(bloodDebtConsumeICDKey, 0.05*60, true)
