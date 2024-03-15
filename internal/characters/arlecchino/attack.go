@@ -18,9 +18,9 @@ import (
 
 var (
 	attackFrames          [][]int
-	attackHitmarks        = [][]int{{17}, {15}, {15}, {14, 31}, {16}, {39}}
-	attackHitlagHaltFrame = [][]float64{{0.01}, {0.01}, {0.01}, {0.02, 0.02}, {0.02}, {0.04}}
-	attackDefHalt         = [][]bool{{true}, {true}, {true}, {false, true}, {true}, {true}}
+	attackHitmarks        = [][]int{{10}, {13}, {16}, {23, 34}, {13}, {39}}
+	attackHitlagHaltFrame = [][]float64{{0.02}, {0.02}, {0.02}, {0, 0}, {0}, {0.02}}
+	attackDefHalt         = [][]bool{{true}, {true}, {true}, {true, false}, {false}, {true}}
 	attackStrikeTypes     = [][]attacks.StrikeType{
 		{attacks.StrikeTypeSlash},
 		{attacks.StrikeTypeSlash},
@@ -65,20 +65,21 @@ const normalHitNum = 6
 func init() {
 	attackFrames = make([][]int, normalHitNum)
 
-	attackFrames[0] = frames.InitNormalCancelSlice(attackHitmarks[0][0], 26)
-	attackFrames[0][action.ActionAttack] = 25
+	attackFrames[0] = frames.InitNormalCancelSlice(attackHitmarks[0][0], 23)
+	attackFrames[0][action.ActionAttack] = 23
 
-	attackFrames[1] = frames.InitNormalCancelSlice(attackHitmarks[1][0], 27)
-	attackFrames[1][action.ActionAttack] = 22
+	attackFrames[1] = frames.InitNormalCancelSlice(attackHitmarks[1][0], 20)
+	attackFrames[1][action.ActionAttack] = 20
 
-	attackFrames[2] = frames.InitNormalCancelSlice(attackHitmarks[2][0], 38)
-	attackFrames[2][action.ActionAttack] = 26
+	attackFrames[2] = frames.InitNormalCancelSlice(attackHitmarks[2][0], 32)
+	attackFrames[2][action.ActionAttack] = 32
 
-	attackFrames[3] = frames.InitNormalCancelSlice(attackHitmarks[3][1], 42)
-	attackFrames[3][action.ActionAttack] = 39
+	attackFrames[3] = frames.InitNormalCancelSlice(attackHitmarks[3][1], 47)
+	attackFrames[3][action.ActionAttack] = 47
 
 	attackFrames[4] = frames.InitNormalCancelSlice(attackHitmarks[4][0], 30)
 	attackFrames[4][action.ActionAttack] = 24
+	attackFrames[4][action.ActionDash] = 28
 
 	attackFrames[5] = frames.InitNormalCancelSlice(attackHitmarks[5][0], 79)
 	attackFrames[5][action.ActionCharge] = 500 //TODO: this action is illegal; need better way to handle it
@@ -132,7 +133,9 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 			HitlagHaltFrames:   attackHitlagHaltFrame[c.NormalCounter][i] * 60,
 			CanBeDefenseHalted: attackDefHalt[c.NormalCounter][i],
 		}
-
+		if c.NormalCounter == 3 && i == 0 {
+			ai.HitlagFactor = 0
+		}
 		naIndex := 0
 		if c.StatusIsActive(naBuffKey) {
 			naIndex = 1
