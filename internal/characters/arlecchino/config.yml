@@ -16,7 +16,7 @@ skill_data_mapping:
             - 4 # 5-Hit DMG|{param6:F1P}
         attack_6:
             - 5 # 6-Hit DMG|{param5:F1P}
-        ca:
+        charge:
             - 6 # Charged Attack DMG|{param6:F1P}
         collision:
             - 8 # Plunge DMG|{param6:F1P}

@@ -7,9 +7,9 @@ element: Fire
 weapon_class: WEAPON_POLE
 icon_name: "UI_AvatarIcon_Arlecchino"
 stats: {
-   base_hp: 1020
+   base_hp: 1020.0524291992188
    base_atk: 26.62660026550293
-   base_def: 59.53
+   base_def: 59.53084945678711
    hp_curve: GROW_CURVE_HP_S5
    atk_curve: GROW_CURVE_ATTACK_S5
    def_cruve: GROW_CURVE_HP_S5
@@ -32,11 +32,11 @@ stats: {
       max_level: 40
       add_props: {
          prop_type: FIGHT_PROP_BASE_HP
-         value: 875
+         value: 874.6027221679688
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_DEFENSE
-         value: 51.05
+         value: 51.04349899291992
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_ATTACK
@@ -50,11 +50,11 @@ stats: {
       max_level: 50
       add_props: {
          prop_type: FIGHT_PROP_BASE_HP
-         value: 14.96
+         value: 1496.0308837890625
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_DEFENSE
-         value: 87.32
+         value: 87.31124877929688
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_ATTACK
@@ -69,11 +69,11 @@ stats: {
       max_level: 60
       add_props: {
          prop_type: FIGHT_PROP_BASE_HP
-         value: 2324
+         value: 2324.601806640625
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_DEFENSE
-         value: 135.68
+         value: 135.66824340820312
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_ATTACK
@@ -88,11 +88,11 @@ stats: {
       max_level: 70
       add_props: {
          prop_type: FIGHT_PROP_BASE_HP
-         value: 2945
+         value: 2946.030029296875
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_DEFENSE
-         value: 171.95
+         value: 171.93600463867188
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_ATTACK
@@ -107,11 +107,11 @@ stats: {
       max_level: 80
       add_props: {
          prop_type: FIGHT_PROP_BASE_HP
-         value: 3567
+         value: 3567.45849609375
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_DEFENSE
-         value: 208.222
+         value: 208.20375061035156
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_ATTACK
@@ -126,11 +126,11 @@ stats: {
       max_level: 90
       add_props: {
          prop_type: FIGHT_PROP_BASE_HP
-         value: 4188
+         value: 4188.88671875
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_DEFENSE
-         value: 244.49
+         value: 244.47149658203125
       }
       add_props: {
          prop_type: FIGHT_PROP_BASE_ATTACK
@@ -143,9 +143,9 @@ stats: {
    }
 }
 skill_details: {
-   skill: 10018
-   burst: 10019
-   attack: 10024
+   skill: 10962
+   burst: 10965
+   attack: 10961
    burst_energy_cost: 60
 }
-name_text_hash_map: 1006042610
+name_text_hash_map: 167199474
