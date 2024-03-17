@@ -118,52 +118,56 @@ func (c *char) naBuff() {
 }
 
 func (c *char) Attack(p map[string]int) (action.Info, error) {
-	for i, mult := range attack[c.NormalCounter] {
-		ai := combat.AttackInfo{
-			ActorIndex:         c.Index,
-			Abil:               fmt.Sprintf("Normal %v", c.NormalCounter),
-			AttackTag:          attacks.AttackTagNormal,
-			ICDTag:             attacks.ICDTagNormalAttack,
-			ICDGroup:           attacks.ICDGroupDefault,
-			StrikeType:         attackStrikeTypes[c.NormalCounter][i],
-			Element:            attributes.Physical,
-			Durability:         25,
-			Mult:               mult[c.TalentLvlAttack()],
-			HitlagFactor:       0.01,
-			HitlagHaltFrames:   attackHitlagHaltFrame[c.NormalCounter][i] * 60,
-			CanBeDefenseHalted: attackDefHalt[c.NormalCounter][i],
-		}
-		if c.NormalCounter == 3 && i == 0 {
-			ai.HitlagFactor = 0
-		}
-		naIndex := 0
-		if c.StatusIsActive(naBuffKey) {
-			naIndex = 1
-			ai.Element = attributes.Pyro
-			ai.IgnoreInfusion = true
-			ai.FlatDmg += blooddebt[c.TalentLvlAttack()] * c.CurrentHPDebt() / c.MaxHP() * c.getTotalAtk()
-		}
-
-		var ap combat.AttackPattern
-		if len(attackHitboxes[naIndex][c.NormalCounter][i]) == 1 { // circle or fan
-			ap = combat.NewCircleHitOnTargetFanAngle(
-				c.Core.Combat.Player(),
-				geometry.Point{X: attackOffsets[c.NormalCounter][i][0], Y: attackOffsets[c.NormalCounter][i][1]},
-				attackHitboxes[naIndex][c.NormalCounter][i][0],
-				attackFanAngles[c.NormalCounter][i],
-			)
-		} else { // box
-			ap = combat.NewBoxHitOnTarget(
-				c.Core.Combat.Player(),
-				geometry.Point{X: attackOffsets[c.NormalCounter][i][0], Y: attackOffsets[c.NormalCounter][i][1]},
-				attackHitboxes[naIndex][c.NormalCounter][i][0],
-				attackHitboxes[naIndex][c.NormalCounter][i][1],
-			)
-		}
-
+	counter := c.NormalCounter
+	for i, mult := range attack[counter] {
+		// clone the values into another variable so that it won't be changed when the queued task executes
+		i := i
+		mult := mult
 		c.QueueCharTask(func() {
+			ai := combat.AttackInfo{
+				ActorIndex:         c.Index,
+				Abil:               fmt.Sprintf("Normal %v", counter),
+				AttackTag:          attacks.AttackTagNormal,
+				ICDTag:             attacks.ICDTagNormalAttack,
+				ICDGroup:           attacks.ICDGroupDefault,
+				StrikeType:         attackStrikeTypes[counter][i],
+				Element:            attributes.Physical,
+				Durability:         25,
+				Mult:               mult[c.TalentLvlAttack()],
+				HitlagFactor:       0.01,
+				HitlagHaltFrames:   attackHitlagHaltFrame[counter][i] * 60,
+				CanBeDefenseHalted: attackDefHalt[counter][i],
+			}
+			if c.NormalCounter == 3 && i == 0 {
+				ai.HitlagFactor = 0
+			}
+			naIndex := 0
+			if c.StatusIsActive(naBuffKey) {
+				naIndex = 1
+				ai.Element = attributes.Pyro
+				ai.IgnoreInfusion = true
+				ai.FlatDmg += blooddebt[c.TalentLvlAttack()] * c.CurrentHPDebt() / c.MaxHP() * c.getTotalAtk()
+			}
+
+			var ap combat.AttackPattern
+			if len(attackHitboxes[naIndex][counter][i]) == 1 { // circle or fan
+				ap = combat.NewCircleHitOnTargetFanAngle(
+					c.Core.Combat.Player(),
+					geometry.Point{X: attackOffsets[counter][i][0], Y: attackOffsets[counter][i][1]},
+					attackHitboxes[naIndex][counter][i][0],
+					attackFanAngles[counter][i],
+				)
+			} else { // box
+				ap = combat.NewBoxHitOnTarget(
+					c.Core.Combat.Player(),
+					geometry.Point{X: attackOffsets[counter][i][0], Y: attackOffsets[counter][i][1]},
+					attackHitboxes[naIndex][counter][i][0],
+					attackHitboxes[naIndex][counter][i][1],
+				)
+			}
+
 			c.Core.QueueAttack(ai, ap, 0, 0, c.bloodDebtConsumeCB)
-		}, attackHitmarks[c.NormalCounter][i])
+		}, attackHitmarks[counter][i])
 	}
 
 	defer c.AdvanceNormalIndex()
@@ -185,12 +189,14 @@ func (c *char) bloodDebtConsumeCB(a combat.AttackCB) {
 	if a.Target.Type() != targets.TargettableEnemy {
 		return
 	}
-	if c.StatusIsActive(bloodDebtConsumeICDKey) {
-		return
-	}
 	if !c.StatusIsActive(naBuffKey) {
 		return
 	}
+
+	if c.StatusIsActive(bloodDebtConsumeICDKey) {
+		return
+	}
+
 	c.AddStatus(bloodDebtConsumeICDKey, 0.05*60, true)
 	c.ModifyHPDebtByAmount(-0.055 * c.CurrentHPDebt())
 }
