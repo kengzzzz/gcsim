@@ -48,6 +48,7 @@ func NewSet(c *core.Core, char *character.CharWrapper, count int, param map[stri
 	}
 
 	if count >= 4 {
+		s.buff = make([]float64, attributes.EndStatType)
 		c.Events.Subscribe(event.OnHPDebt, s.OnHPDept(), fmt.Sprintf("fragmentofharmonicwhimsy-4pc-%v", char.Base.Key.String()))
 	}
 
