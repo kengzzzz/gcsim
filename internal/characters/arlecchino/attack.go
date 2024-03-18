@@ -197,6 +197,7 @@ func (c *char) bloodDebtConsumeCB(a combat.AttackCB) {
 		return
 	}
 
-	c.AddStatus(bloodDebtConsumeICDKey, 0.05*60, true)
-	c.ModifyHPDebtByAmount(-0.055 * c.CurrentHPDebt())
+	// 0.03*60 = 1.8, rounded to 2 frames
+	c.AddStatus(bloodDebtConsumeICDKey, 2, true)
+	c.ModifyHPDebtByAmount(-0.04 * c.CurrentHPDebt())
 }
