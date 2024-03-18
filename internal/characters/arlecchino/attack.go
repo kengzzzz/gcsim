@@ -11,9 +11,7 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/event"
 	"github.com/genshinsim/gcsim/pkg/core/geometry"
 	"github.com/genshinsim/gcsim/pkg/core/glog"
-	"github.com/genshinsim/gcsim/pkg/core/player/character"
 	"github.com/genshinsim/gcsim/pkg/core/targets"
-	"github.com/genshinsim/gcsim/pkg/modifier"
 )
 
 var (
@@ -102,19 +100,6 @@ func (c *char) naBuff() {
 		}
 		return false
 	}, "arlechinno-bol-hook")
-
-	m := make([]float64, attributes.EndStatType)
-	m[attributes.PyroP] = 0.4
-	c.AddStatMod(character.StatMod{
-		Base:         modifier.NewBase("arlecchino-na", -1),
-		AffectedStat: attributes.PyroP,
-		Amount: func() ([]float64, bool) {
-			if c.StatusIsActive(naBuffKey) {
-				return m, true
-			}
-			return nil, false
-		},
-	})
 }
 
 func (c *char) Attack(p map[string]int) (action.Info, error) {

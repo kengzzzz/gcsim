@@ -1,6 +1,7 @@
 package arlecchino
 
 import (
+	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
 	"github.com/genshinsim/gcsim/pkg/core/event"
 	"github.com/genshinsim/gcsim/pkg/core/glog"
@@ -19,6 +20,17 @@ func (c *char) passive() {
 		Base: modifier.NewBaseWithHitlag("arlecchino-passive", -1),
 		Amount: func() (float64, bool) {
 			return -healMod, false
+		},
+	})
+
+	//
+	m := make([]float64, attributes.EndStatType)
+	m[attributes.PyroP] = 0.4
+	c.AddStatMod(character.StatMod{
+		Base:         modifier.NewBase("arlecchino-passive", -1),
+		AffectedStat: attributes.PyroP,
+		Amount: func() ([]float64, bool) {
+			return m, true
 		},
 	})
 }
