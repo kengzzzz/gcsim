@@ -140,7 +140,7 @@ func (c *char) nourishingCinders() {
 		Src:     currentHPDebt,
 		Bonus:   c.Stat(attributes.Heal) + healMod, // cancel out the negative heal bonus we applied to her
 	})
-	c.AddStatus(directiveLimitKey, 20*60, true)
+	c.AddStatus(directiveLimitKey, 35*60, true)
 	c.skillDebtMax = 0.8 * c.MaxHP()
 	c.skillDebt = 0
 }
