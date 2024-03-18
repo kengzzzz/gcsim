@@ -137,7 +137,7 @@ func (c *char) nourishingCinders() {
 		Caller:  c.Index,
 		Target:  c.Index,
 		Message: "Nourishing Cinders",
-		Src:     currentHPDebt,
+		Src:     currentHPDebt * 2.0,
 		Bonus:   c.Stat(attributes.Heal) + healMod, // cancel out the negative heal bonus we applied to her
 	})
 	c.AddStatus(directiveLimitKey, 35*60, true)
