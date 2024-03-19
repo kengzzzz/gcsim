@@ -17,7 +17,7 @@ var a1Directive = []float64{0.0, 0.2, 0.25, 0.7}
 func (c *char) passive() {
 	// zeroes out healing from all other sources besides arlecchino's heal
 	c.AddHealBonusMod(character.HealBonusMod{
-		Base: modifier.NewBaseWithHitlag("arlecchino-passive", -1),
+		Base: modifier.NewBaseWithHitlag("arlecchino-passive-antiheal", -1),
 		Amount: func() (float64, bool) {
 			return -healMod, false
 		},
