@@ -184,5 +184,12 @@ func (c *char) bloodDebtConsumeCB(a combat.AttackCB) {
 
 	// 0.03*60 = 1.8, rounded to 2 frames
 	c.AddStatus(bloodDebtConsumeICDKey, 2, true)
-	c.ModifyHPDebtByAmount(-0.04 * c.CurrentHPDebt())
+
+	amt := -0.04 * c.CurrentHPDebt()
+	// c1
+	if c.Base.Cons >= 1 && c.Core.Rand.Float64() < 0.33 {
+		amt = 0.05 * c.MaxHP()
+	}
+
+	c.ModifyHPDebtByAmount(amt)
 }
