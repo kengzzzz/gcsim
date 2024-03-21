@@ -31,7 +31,7 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 		Mult:       burst[c.TalentLvlSkill()],
 	}
 	skillArea := combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 10)
-	c.Core.QueueAttack(ai, skillArea, burstHitmarks, burstHitmarks)
+	c.Core.QueueAttack(ai, skillArea, burstHitmarks, burstHitmarks, c.c4cb)
 
 	c.QueueCharTask(func() {
 		c.ModifyHPDebtByRatio(0.15)

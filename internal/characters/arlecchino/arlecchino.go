@@ -19,6 +19,7 @@ type char struct {
 	skillDebt             float64
 	skillDebtMax          float64
 	initialDirectiveLevel int
+	bondOnBurst           float64
 }
 
 func Heal() {
@@ -45,6 +46,7 @@ func (c *char) Init() error {
 	c.a4()
 
 	c.c2()
+	c.c4()
 	return nil
 }
 func (c *char) NextQueueItemIsValid(a action.Action, p map[string]int) error {

@@ -69,9 +69,6 @@ func (c *char) absorbDirectives() {
 		}
 
 		level := e.GetTag(directiveKey)
-		if level == 3 {
-			c.c2OnAbsorbLevel3()
-		}
 
 		newDebt := a1Directive[level] * c.MaxHP()
 		if c.StatusIsActive(directiveLimitKey) {
@@ -85,5 +82,10 @@ func (c *char) absorbDirectives() {
 		e.RemoveTag(directiveKey)
 		e.RemoveTag(directiveSrcKey)
 		e.DeleteStatus(directiveKey)
+
+		c.c4OnAbsorb()
+		if level >= 3 {
+			c.c2OnAbsorbLevel3()
+		}
 	}
 }
