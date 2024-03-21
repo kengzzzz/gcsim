@@ -68,6 +68,7 @@ func (c *char) a1Upgrade(e combat.Enemy, src int) {
 		c.Core.Log.NewEvent("Directive upgraded", glog.LogCharacterEvent, c.Index).
 			Write("new_level", level+1).
 			Write("src", src)
+		c.a1Upgrade(e, src)
 	}, 3*60)
 }
 
