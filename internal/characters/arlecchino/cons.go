@@ -5,12 +5,17 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/attacks"
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
+	"github.com/genshinsim/gcsim/pkg/core/event"
 	"github.com/genshinsim/gcsim/pkg/core/glog"
+	"github.com/genshinsim/gcsim/pkg/core/player/character"
 	"github.com/genshinsim/gcsim/pkg/core/targets"
+	"github.com/genshinsim/gcsim/pkg/modifier"
 )
 
 const c2IcdKey = "arlecchino-c2-icd"
 const c4IcdKey = "arlecchino-c4-icd"
+const c6IcdKey = "arlecchino-c6-icd"
+const c6Key = "arlecchino-c6"
 
 func (c *char) c2() {
 	c.initialDirectiveLevel = 1
@@ -96,4 +101,43 @@ func (c *char) c4OnAbsorb() {
 	c.AddStatus(c4IcdKey, 10*60, true)
 	c.ReduceActionCooldown(action.ActionBurst, 2*60)
 	c.AddEnergy("arlecchino-c4", 15)
+}
+func (c *char) c6() {
+	c.Core.Events.Subscribe(event.OnEnemyHit, func(args ...interface{}) bool {
+		ae := args[1].(*combat.AttackEvent)
+		if ae.Info.Abil != skillFinalAbil {
+			return false
+		}
+		amt := c.getTotalAtk() * 5.0 * c.CurrentHPDebt() / c.MaxHP()
+		c.Core.Log.NewEvent("Arlecchino C6 dmg add", glog.LogCharacterEvent, c.Index).
+			Write("amt", amt)
+
+		ae.Info.FlatDmg += amt
+
+		return false
+	}, "arlecchino-c6-skill")
+}
+func (c *char) c6skill() {
+	if c.Base.Cons < 6 {
+		return
+	}
+
+	if c.StatusIsActive(c6IcdKey) {
+		return
+	}
+	c.AddStatus(c6IcdKey, 15*60, true)
+
+	m := make([]float64, attributes.EndStatType)
+	m[attributes.CR] = 0.1
+	m[attributes.CD] = 0.7
+	c.AddAttackMod(character.AttackMod{
+		Base: modifier.NewBase(c6Key, 20*60),
+		Amount: func(atk *combat.AttackEvent, t combat.Target) ([]float64, bool) {
+			switch atk.Info.AttackTag {
+			case attacks.AttackTagElementalBurst, attacks.AttackTagNormal:
+				return m, true
+			}
+			return nil, false
+		},
+	})
 }

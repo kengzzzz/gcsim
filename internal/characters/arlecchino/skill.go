@@ -17,6 +17,7 @@ var skillFrames []int
 const (
 	spikeHitmark      = 14
 	finalHitmark      = 37
+	skillFinalAbil    = "All is Ash (Final)"
 	particleICDKey    = "arlecchino-particle-icd"
 	directiveLimitKey = "directive-limit"
 	directiveKey      = "directive"
@@ -44,7 +45,7 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 
 	ai = combat.AttackInfo{
 		ActorIndex:         c.Index,
-		Abil:               "All is Ash (Final)",
+		Abil:               skillFinalAbil,
 		AttackTag:          attacks.AttackTagElementalArt,
 		ICDTag:             attacks.ICDTagNone,
 		ICDGroup:           attacks.ICDGroupDefault,
@@ -60,7 +61,7 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 	c.QueueCharTask(c.nourishingCinders, finalHitmark+1)
 
 	c.SetCDWithDelay(action.ActionSkill, 15*60, 0)
-
+	c.QueueCharTask(c.c6skill, finalHitmark)
 	return action.Info{
 		Frames:          frames.NewAbilFunc(skillFrames),
 		AnimationLength: skillFrames[action.InvalidAction],

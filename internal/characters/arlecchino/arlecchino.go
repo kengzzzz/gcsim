@@ -47,6 +47,7 @@ func (c *char) Init() error {
 
 	c.c2()
 	c.c4()
+	c.c6()
 	return nil
 }
 func (c *char) NextQueueItemIsValid(a action.Action, p map[string]int) error {
