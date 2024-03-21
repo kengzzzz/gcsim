@@ -92,7 +92,7 @@ func (c *char) bloodDebtDirective(a combat.AttackCB) {
 	}
 	trg.AddStatus(directiveKey, 30*60, true)
 	trg.SetTag(directiveSrcKey, c.Core.F)
-	trg.SetTag(directiveKey, 1)
+	trg.SetTag(directiveKey, c.initialDirectiveLevel)
 	trg.QueueEnemyTask(c.directiveTickFunc(c.Core.F, 3, trg), 3*60)
 	c.a1Upgrade(trg, c.Core.F)
 }

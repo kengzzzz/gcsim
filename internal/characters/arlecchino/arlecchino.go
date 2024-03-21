@@ -16,8 +16,9 @@ func init() {
 
 type char struct {
 	*tmpl.Character
-	skillDebt    float64
-	skillDebtMax float64
+	skillDebt             float64
+	skillDebtMax          float64
+	initialDirectiveLevel int
 }
 
 func Heal() {
@@ -42,6 +43,8 @@ func (c *char) Init() error {
 	c.passive()
 	c.a1OnKill()
 	c.a4()
+
+	c.c2()
 	return nil
 }
 func (c *char) NextQueueItemIsValid(a action.Action, p map[string]int) error {

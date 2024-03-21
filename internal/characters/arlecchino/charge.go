@@ -69,6 +69,10 @@ func (c *char) absorbDirectives() {
 		}
 
 		level := e.GetTag(directiveKey)
+		if level == 3 {
+			c.c2OnAbsorb()
+		}
+
 		newDebt := a1Directive[level] * c.MaxHP()
 		if c.StatusIsActive(directiveLimitKey) {
 			newDebt = min(c.skillDebtMax-c.skillDebt, newDebt)
