@@ -8052,6 +8052,82 @@ var EnemyMap = map[int]*MonsterData{
 			},
 		},
 	},
+	26140101: {
+		Id:              26140101,
+		Key:             "legatusgolem",
+		NameTextHashMap: 3250212056,
+		BaseStats: &MonsterStatsData{
+			BaseHp:  217.343994140625,
+			HpCurve: MonsterCurveType_GROW_CURVE_HP_2,
+			Resist: &MonsterResistData{
+				FireResist:     0.10000000149011612,
+				GrassResist:    0.10000000149011612,
+				WaterResist:    0.10000000149011612,
+				ElectricResist: 0.10000000149011612,
+				WindResist:     0.10000000149011612,
+				IceResist:      0.10000000149011612,
+				RockResist:     0.10000000149011612,
+				PhysicalResist: 0.10000000149011612,
+			},
+			FreezeResist: 1,
+			HpDrop: []*MonsterHPDrop{
+				{
+					DropId:    22010030,
+					HpPercent: 0.75,
+				},
+				{
+					DropId:    22010030,
+					HpPercent: 0.5,
+				},
+				{
+					DropId:    22010030,
+					HpPercent: 0.25,
+				},
+				{
+					DropId:    22010030,
+					HpPercent: 0,
+				},
+			},
+		},
+	},
+	26140201: {
+		Id:              26140201,
+		Key:             "praetoriangolem",
+		NameTextHashMap: 1323518088,
+		BaseStats: &MonsterStatsData{
+			BaseHp:  54.33599853515625,
+			HpCurve: MonsterCurveType_GROW_CURVE_HP_2,
+			Resist: &MonsterResistData{
+				FireResist:     0.10000000149011612,
+				GrassResist:    0.10000000149011612,
+				WaterResist:    0.10000000149011612,
+				ElectricResist: 0.10000000149011612,
+				WindResist:     0.10000000149011612,
+				IceResist:      0.10000000149011612,
+				RockResist:     0.10000000149011612,
+				PhysicalResist: 0.10000000149011612,
+			},
+			FreezeResist: 0,
+			HpDrop: []*MonsterHPDrop{
+				{
+					DropId:    22010010,
+					HpPercent: 0.75,
+				},
+				{
+					DropId:    22010010,
+					HpPercent: 0.5,
+				},
+				{
+					DropId:    22010010,
+					HpPercent: 0.25,
+				},
+				{
+					DropId:    22010030,
+					HpPercent: 0,
+				},
+			},
+		},
+	},
 	26151001: {
 		Id:              26151001,
 		Key:             "huntersray",
