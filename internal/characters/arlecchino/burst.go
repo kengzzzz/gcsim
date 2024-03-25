@@ -6,6 +6,7 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/attacks"
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
+	"github.com/genshinsim/gcsim/pkg/core/player"
 )
 
 const burstHitmarks = 114
@@ -32,10 +33,7 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 	}
 	skillArea := combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 10)
 	c.Core.QueueAttack(ai, skillArea, burstHitmarks, burstHitmarks, c.c4cb)
-
-	c.QueueCharTask(func() {
-		c.ModifyHPDebtByRatio(0.15)
-	}, burstHitmarks)
+	c.QueueCharTask(c.nourishingCinders, finalHitmark+1)
 	// add cooldown to sim
 	c.SetCDWithDelay(action.ActionBurst, 15*60, 0)
 	// use up energy
@@ -47,4 +45,16 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 		CanQueueAfter:   burstFrames[action.ActionSwap], // earliest cancel
 		State:           action.BurstState,
 	}, nil
+}
+
+func (c *char) nourishingCinders() {
+	amt := c.CurrentHPDebt() + 3.0*c.getTotalAtk()
+	c.Core.Player.Heal(player.HealInfo{
+		Caller:  c.Index,
+		Target:  c.Index,
+		Message: "Nourishing Cinders",
+		Src:     amt,
+		Bonus:   c.Stat(attributes.Heal) + healMod, // cancel out the negative heal bonus we applied to her
+	})
+	c.ResetActionCooldown(action.ActionSkill)
 }

@@ -7,7 +7,6 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
 	"github.com/genshinsim/gcsim/pkg/core/glog"
-	"github.com/genshinsim/gcsim/pkg/core/player"
 	"github.com/genshinsim/gcsim/pkg/core/targets"
 	"github.com/genshinsim/gcsim/pkg/enemy"
 )
@@ -58,7 +57,7 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 
 	skillArea = combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 3)
 	c.Core.QueueAttack(ai, skillArea, finalHitmark, finalHitmark, c.particleCB, c.bloodDebtDirective)
-	c.QueueCharTask(c.nourishingCinders, finalHitmark+1)
+	c.QueueCharTask(c.debtLimit, finalHitmark+1)
 
 	c.SetCDWithDelay(action.ActionSkill, 30*60, 0)
 	c.QueueCharTask(c.c6skill, finalHitmark)
@@ -131,16 +130,7 @@ func (c *char) directiveTickFunc(src, count int, trg *enemy.Enemy) func() {
 	}
 }
 
-func (c *char) nourishingCinders() {
-	currentHPDebt := c.CurrentHPDebt()
-	c.ModifyHPDebtByAmount(-currentHPDebt)
-	c.Core.Player.Heal(player.HealInfo{
-		Caller:  c.Index,
-		Target:  c.Index,
-		Message: "Nourishing Cinders",
-		Src:     currentHPDebt * 2.0,
-		Bonus:   c.Stat(attributes.Heal) + healMod, // cancel out the negative heal bonus we applied to her
-	})
+func (c *char) debtLimit() {
 	c.AddStatus(directiveLimitKey, 35*60, true)
 	c.skillDebtMax = 0.8 * c.MaxHP()
 	c.skillDebt = 0
