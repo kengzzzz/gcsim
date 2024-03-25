@@ -24,8 +24,8 @@ func (c *char) c2() {
 	}
 }
 
-func (c *char) c2OnAbsorbLevel3() {
-	// Check is redundant? Can't reach level 3 directives without A1
+func (c *char) c2OnAbsorbDue() {
+	// Check is redundant? Can't reach blood debt due without A1
 	if c.Base.Cons < 2 || c.Base.Ascension < 1 {
 		return
 	}

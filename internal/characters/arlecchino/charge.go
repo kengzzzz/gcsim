@@ -84,8 +84,8 @@ func (c *char) absorbDirectives() {
 		e.DeleteStatus(directiveKey)
 
 		c.c4OnAbsorb()
-		if level >= 3 {
-			c.c2OnAbsorbLevel3()
+		if level >= 2 {
+			c.c2OnAbsorbDue()
 		}
 	}
 }
