@@ -12,7 +12,7 @@ import (
 
 const healMod = 10000
 
-var a1Directive = []float64{0.0, 0.2, 0.25, 0.7}
+var a1Directive = []float64{0.0, 0.4, 0.7}
 
 func (c *char) passive() {
 	// zeroes out healing from all other sources besides arlecchino's heal
@@ -58,7 +58,7 @@ func (c *char) a1Upgrade(e combat.Enemy, src int) {
 		if level == 0 {
 			return
 		}
-		if level >= 3 {
+		if level >= 2 {
 			return
 		}
 		if e.GetTag(directiveSrcKey) != src {
@@ -68,8 +68,7 @@ func (c *char) a1Upgrade(e combat.Enemy, src int) {
 		c.Core.Log.NewEvent("Directive upgraded", glog.LogCharacterEvent, c.Index).
 			Write("new_level", level+1).
 			Write("src", src)
-		c.a1Upgrade(e, src)
-	}, 3*60)
+	}, 5*60)
 }
 
 func (c *char) a4() {
