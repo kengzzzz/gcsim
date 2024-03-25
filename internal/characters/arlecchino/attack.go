@@ -92,7 +92,7 @@ func (c *char) naBuff() {
 		c.Core.Log.NewEvent("Bond of Life changed", glog.LogCharacterEvent, c.Index).
 			Write("arle_hp_debt", c.CurrentHPDebt()).
 			Write("arle_hp_debt%", c.CurrentHPDebt()/c.MaxHP())
-		if c.CurrentHPDebt() >= c.MaxHP()*0.3 {
+		if c.CurrentHPDebt() >= c.MaxHP()*0.2 {
 			// can't use negative duration or else `if .arlecchino.status.in-praise-of-shadows` won't work
 			c.AddStatus(naBuffKey, 999999, false)
 		} else {
@@ -182,14 +182,15 @@ func (c *char) bloodDebtConsumeCB(a combat.AttackCB) {
 		return
 	}
 
-	// 0.03*60 = 1.8, rounded to 2 frames
-	c.AddStatus(bloodDebtConsumeICDKey, 2, true)
+	c.AddStatus(bloodDebtConsumeICDKey, 0.05*60, true)
 
-	amt := -0.04 * c.CurrentHPDebt()
+	amt := -0.065 * c.CurrentHPDebt()
 	// c1
 	if c.Base.Cons >= 1 && c.Core.Rand.Float64() < 0.33 {
 		amt = 0.05 * c.MaxHP()
 	}
 
 	c.ModifyHPDebtByAmount(amt)
+
+	c.ReduceActionCooldown(action.ActionSkill, 0.8*60)
 }
