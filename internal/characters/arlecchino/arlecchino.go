@@ -22,9 +22,6 @@ type char struct {
 	bondOnBurst           float64
 }
 
-func Heal() {
-
-}
 func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) error {
 	c := char{}
 	c.Character = tmpl.NewWithWrapper(s, w)
