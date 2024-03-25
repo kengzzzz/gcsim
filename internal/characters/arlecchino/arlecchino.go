@@ -29,7 +29,7 @@ func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) er
 	c := char{}
 	c.Character = tmpl.NewWithWrapper(s, w)
 
-	c.EnergyMax = 60
+	c.EnergyMax = base.SkillDetails.BurstEnergyCost
 	c.NormalHitNum = normalHitNum
 	c.NormalCon = 3
 	c.BurstCon = 5
