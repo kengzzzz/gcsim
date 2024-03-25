@@ -60,7 +60,7 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 	c.Core.QueueAttack(ai, skillArea, finalHitmark, finalHitmark, c.particleCB, c.bloodDebtDirective)
 	c.QueueCharTask(c.nourishingCinders, finalHitmark+1)
 
-	c.SetCDWithDelay(action.ActionSkill, 15*60, 0)
+	c.SetCDWithDelay(action.ActionSkill, 30*60, 0)
 	c.QueueCharTask(c.c6skill, finalHitmark)
 	return action.Info{
 		Frames:          frames.NewAbilFunc(skillFrames),
@@ -94,7 +94,7 @@ func (c *char) bloodDebtDirective(a combat.AttackCB) {
 	trg.AddStatus(directiveKey, 30*60, true)
 	trg.SetTag(directiveSrcKey, c.Core.F)
 	trg.SetTag(directiveKey, c.initialDirectiveLevel)
-	trg.QueueEnemyTask(c.directiveTickFunc(c.Core.F, 3, trg), 3*60)
+	trg.QueueEnemyTask(c.directiveTickFunc(c.Core.F, 2, trg), 5*60)
 	c.a1Upgrade(trg, c.Core.F)
 }
 
@@ -124,9 +124,9 @@ func (c *char) directiveTickFunc(src, count int, trg *enemy.Enemy) func() {
 		}
 		c.Core.QueueAttack(ai, combat.NewSingleTargetHit(trg.Key()), 0, 0)
 
-		if count > 0 {
+		if count-1 > 0 {
 			// queue up next instance
-			trg.QueueEnemyTask(c.directiveTickFunc(src, count-1, trg), 3*60)
+			trg.QueueEnemyTask(c.directiveTickFunc(src, count-1, trg), 5*60)
 		}
 	}
 }
