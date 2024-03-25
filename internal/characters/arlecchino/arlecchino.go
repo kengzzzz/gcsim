@@ -4,6 +4,7 @@ import (
 	tmpl "github.com/genshinsim/gcsim/internal/template/character"
 	"github.com/genshinsim/gcsim/pkg/core"
 	"github.com/genshinsim/gcsim/pkg/core/action"
+	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/info"
 	"github.com/genshinsim/gcsim/pkg/core/keys"
 	"github.com/genshinsim/gcsim/pkg/core/player/character"
@@ -47,6 +48,7 @@ func (c *char) Init() error {
 	c.c6()
 	return nil
 }
+
 func (c *char) NextQueueItemIsValid(a action.Action, p map[string]int) error {
 	// can use charge without attack beforehand unlike most of the other polearm users
 	if a == action.ActionCharge {
@@ -60,4 +62,9 @@ func (c *char) AnimationStartDelay(k model.AnimationDelayKey) int {
 		return 7
 	}
 	return c.Character.AnimationStartDelay(k)
+}
+
+func (c *char) getTotalAtk() float64 {
+	stats, _ := c.Stats()
+	return c.Base.Atk*(1+stats[attributes.ATKP]) + stats[attributes.ATK]
 }

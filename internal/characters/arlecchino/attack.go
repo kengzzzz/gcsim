@@ -131,7 +131,7 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 				naIndex = 1
 				ai.Element = attributes.Pyro
 				ai.IgnoreInfusion = true
-				ai.FlatDmg += blooddebt[c.TalentLvlAttack()] * c.CurrentHPDebt() / c.MaxHP() * c.getTotalAtk()
+				ai.FlatDmg += c.blooddebtBonus()
 			}
 
 			var ap combat.AttackPattern
@@ -165,9 +165,13 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 	}, nil
 }
 
-func (c *char) getTotalAtk() float64 {
-	stats, _ := c.Stats()
-	return c.Base.Atk*(1+stats[attributes.ATKP]) + stats[attributes.ATK]
+func (c *char) blooddebtBonus() float64 {
+	c1Bonus := 0.0
+	if c.Base.Cons >= 1 {
+		c1Bonus = 1.2
+	}
+	amt := blooddebt[c.TalentLvlAttack()] * c1Bonus * c.CurrentHPDebt() / c.MaxHP() * c.getTotalAtk()
+	return amt
 }
 
 func (c *char) bloodDebtConsumeCB(a combat.AttackCB) {
@@ -185,10 +189,6 @@ func (c *char) bloodDebtConsumeCB(a combat.AttackCB) {
 	c.AddStatus(bloodDebtConsumeICDKey, 0.05*60, true)
 
 	amt := -0.065 * c.CurrentHPDebt()
-	// c1
-	if c.Base.Cons >= 1 && c.Core.Rand.Float64() < 0.33 {
-		amt = 0.05 * c.MaxHP()
-	}
 
 	c.ModifyHPDebtByAmount(amt)
 
