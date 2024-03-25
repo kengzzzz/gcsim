@@ -20,7 +20,6 @@ type char struct {
 	skillDebt             float64
 	skillDebtMax          float64
 	initialDirectiveLevel int
-	bondOnBurst           float64
 }
 
 func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) error {
@@ -44,7 +43,6 @@ func (c *char) Init() error {
 	c.a4()
 
 	c.c2()
-	c.c4()
 	c.c6()
 	return nil
 }

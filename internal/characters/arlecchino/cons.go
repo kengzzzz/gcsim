@@ -8,7 +8,6 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/event"
 	"github.com/genshinsim/gcsim/pkg/core/glog"
 	"github.com/genshinsim/gcsim/pkg/core/player/character"
-	"github.com/genshinsim/gcsim/pkg/core/targets"
 	"github.com/genshinsim/gcsim/pkg/modifier"
 )
 
@@ -59,36 +58,6 @@ func (c *char) c2OnAbsorbDue() {
 	)
 }
 
-func (c *char) c4() {
-	c.bondOnBurst = 0.15
-	if c.Base.Cons >= 4 && c.Base.Ascension >= 1 {
-		c.bondOnBurst = 0.25
-	}
-}
-
-func (c *char) c4cb(a combat.AttackCB) {
-	if c.Base.Cons < 4 || c.Base.Ascension < 1 {
-		return
-	}
-
-	if a.Target.Type() != targets.TargettableEnemy {
-		return
-	}
-	level := a.Target.GetTag(directiveKey)
-
-	if level == 0 {
-		return
-	}
-
-	if level >= 3 {
-		return
-	}
-	a.Target.SetTag(directiveKey, level+1)
-	c.Core.Log.NewEvent("Directive upgraded (C4)", glog.LogCharacterEvent, c.Index).
-		Write("new_level", level+1).
-		Write("src", "c4")
-}
-
 func (c *char) c4OnAbsorb() {
 	if c.Base.Cons < 4 {
 		return
@@ -102,20 +71,26 @@ func (c *char) c4OnAbsorb() {
 	c.ReduceActionCooldown(action.ActionBurst, 2*60)
 	c.AddEnergy("arlecchino-c4", 15)
 }
+
 func (c *char) c6() {
 	c.Core.Events.Subscribe(event.OnEnemyHit, func(args ...interface{}) bool {
 		ae := args[1].(*combat.AttackEvent)
-		if ae.Info.Abil != skillFinalAbil {
+		if ae.Info.ActorIndex != c.Index {
 			return false
 		}
-		amt := c.getTotalAtk() * 5.0 * c.CurrentHPDebt() / c.MaxHP()
+
+		if ae.Info.AttackTag != attacks.AttackTagElementalBurst {
+			return false
+		}
+
+		amt := c.getTotalAtk() * 7.0 * c.CurrentHPDebt() / c.MaxHP()
 		c.Core.Log.NewEvent("Arlecchino C6 dmg add", glog.LogCharacterEvent, c.Index).
 			Write("amt", amt)
 
 		ae.Info.FlatDmg += amt
 
 		return false
-	}, "arlecchino-c6-skill")
+	}, "arlecchino-c6-burst")
 }
 func (c *char) c6skill() {
 	if c.Base.Cons < 6 {

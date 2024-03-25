@@ -16,7 +16,6 @@ var skillFrames []int
 const (
 	spikeHitmark      = 14
 	finalHitmark      = 37
-	skillFinalAbil    = "All is Ash (Final)"
 	particleICDKey    = "arlecchino-particle-icd"
 	directiveLimitKey = "directive-limit"
 	directiveKey      = "directive"
@@ -44,7 +43,7 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 
 	ai = combat.AttackInfo{
 		ActorIndex:         c.Index,
-		Abil:               skillFinalAbil,
+		Abil:               "All is Ash (Final)",
 		AttackTag:          attacks.AttackTagElementalArt,
 		ICDTag:             attacks.ICDTagNone,
 		ICDGroup:           attacks.ICDGroupDefault,
