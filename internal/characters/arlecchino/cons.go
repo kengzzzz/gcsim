@@ -73,6 +73,10 @@ func (c *char) c4OnAbsorb() {
 }
 
 func (c *char) c6() {
+	if c.Base.Cons < 6 {
+		return
+	}
+
 	c.Core.Events.Subscribe(event.OnEnemyHit, func(args ...interface{}) bool {
 		ae := args[1].(*combat.AttackEvent)
 		if ae.Info.ActorIndex != c.Index {
