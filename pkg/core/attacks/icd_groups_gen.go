@@ -3,7 +3,6 @@ package attacks
 
 const (
 	ICDGroupGeneratedStart ICDGroup = iota + EndDefaultICDGroups + 1
-	ICDGroupArlecchinoElementalArt
 	ICDGroupAlhaithamProjectionAttack
 	ICDGroupAlhaithamExtraAttack
 	ICDGroupAmber
