@@ -170,7 +170,7 @@ func (c *char) blooddebtBonus() float64 {
 	if c.Base.Cons >= 1 {
 		c1Bonus = 1.2
 	}
-	amt := blooddebt[c.TalentLvlAttack()] * c1Bonus * c.CurrentHPDebt() / c.MaxHP() * c.getTotalAtk()
+	amt := (blooddebt[c.TalentLvlAttack()] + c1Bonus) * c.CurrentHPDebt() / c.MaxHP() * c.getTotalAtk()
 	return amt
 }
 
