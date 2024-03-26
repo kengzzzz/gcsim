@@ -33,7 +33,7 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 	}
 	skillArea := combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 10)
 	c.Core.QueueAttack(ai, skillArea, burstHitmarks, burstHitmarks)
-	c.QueueCharTask(c.nourishingCinders, finalHitmark+1)
+	c.QueueCharTask(c.nourishingCinders, burstHitmarks+1)
 	// add cooldown to sim
 	c.SetCDWithDelay(action.ActionBurst, 15*60, 0)
 	// use up energy
