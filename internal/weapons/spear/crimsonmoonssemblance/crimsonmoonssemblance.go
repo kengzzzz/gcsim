@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/genshinsim/gcsim/pkg/core"
+	"github.com/genshinsim/gcsim/pkg/core/attacks"
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
 	"github.com/genshinsim/gcsim/pkg/core/event"
@@ -34,7 +35,7 @@ func NewWeapon(c *core.Core, char *character.CharWrapper, p info.WeaponProfile) 
 	r := p.Refine
 
 	hasBoL := float64(r)*0.04 + 0.08
-	gteBoL := float64(r)*0.08 + 0.12
+	gteBoL := float64(r)*0.08 + 0.16
 
 	char.AddAttackMod(character.AttackMod{
 		Base: modifier.NewBase("crimsonmoonssemblance-buff", -1),
@@ -43,7 +44,7 @@ func NewWeapon(c *core.Core, char *character.CharWrapper, p info.WeaponProfile) 
 			if char.CurrentHPDebt() > 0 {
 				buff[attributes.DmgP] += hasBoL
 			}
-			if char.CurrentHPDebt() >= char.MaxHP()*0.3 {
+			if char.CurrentHPDebt() >= char.MaxHP()*0.2 {
 				buff[attributes.DmgP] += gteBoL
 			}
 			return buff, true
@@ -59,6 +60,9 @@ func NewWeapon(c *core.Core, char *character.CharWrapper, p info.WeaponProfile) 
 		if c.Player.Active() != char.Index {
 			return false
 		}
+		if atk.Info.AttackTag != attacks.AttackTagExtra {
+			return false
+		}
 
 		if char.StatusIsActive(buffICDKey) {
 			return false
@@ -66,7 +70,7 @@ func NewWeapon(c *core.Core, char *character.CharWrapper, p info.WeaponProfile) 
 
 		char.AddStatus(buffICDKey, buffICD, true)
 
-		char.ModifyHPDebtByRatio(0.25)
+		char.ModifyHPDebtByRatio(0.18)
 
 		return false
 	}, fmt.Sprintf("crimsonmoonssemblance-%v", char.Base.Key.String()))
