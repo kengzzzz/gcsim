@@ -61,6 +61,7 @@ const (
 	Albedo
 	Aloy
 	Amber
+	Arlecchino
 	Barbara
 	Beidou
 	Bennett
@@ -163,6 +164,7 @@ var charNames = []string{
 	"albedo",
 	"aloy",
 	"amber",
+	"arlecchino",
 	"barbara",
 	"beidou",
 	"bennett",
@@ -264,6 +266,7 @@ var charPrettyName = []string{
 	"Albedo",
 	"Aloy",
 	"Amber",
+	"Arlecchino",
 	"Barbara",
 	"Beidou",
 	"Bennett",
@@ -361,6 +364,7 @@ var CharKeyToEle = map[Char]attributes.Element{
 	Albedo:           attributes.Geo,
 	Aloy:             attributes.Cryo,
 	Amber:            attributes.Pyro,
+	Arlecchino:       attributes.Pyro,
 	Barbara:          attributes.Hydro,
 	Beidou:           attributes.Electro,
 	Bennett:          attributes.Pyro,

@@ -251,6 +251,8 @@ var MonsterNameToID = map[string]int{
 	"groundedhydroshroom":                   26120301,
 	"groundedgeoshroom":                     26120401,
 	"setekhwenut":                           26130101,
+	"legatusgolem":                          26140101,
+	"praetoriangolem":                       26140201,
 	"huntersray":                            26151001,
 	"armoredcrab":                           26152101,
 	"blubberbeast":                          26153101,

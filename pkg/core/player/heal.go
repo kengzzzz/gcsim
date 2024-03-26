@@ -48,7 +48,7 @@ func (h *Handler) HealIndex(info *HealInfo, index int) {
 	prevHPDebt := c.CurrentHPDebt()
 
 	// calc original heal amount
-	healAmt := hp * bonus
+	healAmt := max(hp*bonus, 0)
 
 	// calc actual heal amount considering hp debt
 	// TODO: assumes that healing can occur in the same heal as debt being cleared, could also be that it can only occur starting from next heal
