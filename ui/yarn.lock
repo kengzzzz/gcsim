@@ -3403,6 +3403,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@cfworker/uuid@npm:^1.12.4":
+  version: 1.12.4
+  resolution: "@cfworker/uuid@npm:1.12.4"
+  checksum: b580b2263fbeb2614a1e0105a48647f7b119a06901c5b2e4e951cb8ad94bb7d332a817e945b5adecc2dd661e9e5c04077262cc1a2653f1cab820c6a1c4a7f0a7
+  languageName: node
+  linkType: hard
+
 "@chromatic-com/storybook@npm:^1.2.25":
   version: 1.2.25
   resolution: "@chromatic-com/storybook@npm:1.2.25"
@@ -4758,6 +4765,39 @@ __metadata:
     rollup-plugin-visualizer: ^5.8.3
     vite: ^4.1.1
     vite-tsconfig-paths: ^4.0.5
+  languageName: unknown
+  linkType: soft
+
+"@gcsim/wfpsim@workspace:packages/wfp":
+  version: 0.0.0-use.local
+  resolution: "@gcsim/wfpsim@workspace:packages/wfp"
+  dependencies:
+    "@blueprintjs/core": ^4.11.4
+    "@gcsim/executors": "workspace:^"
+    "@gcsim/ui": "workspace:^"
+    "@gcsim/utils": "workspace:^"
+    "@vitejs/plugin-react": ^3.1.0
+    axios: ^1.6.7
+    git-rev-sync: ^3.0.2
+    rollup-plugin-visualizer: ^5.8.3
+    vite: ^4.1.1
+    vite-tsconfig-paths: ^4.0.5
+  languageName: unknown
+  linkType: soft
+
+"@gcsim/wfpworkers@workspace:packages/wfpworkers":
+  version: 0.0.0-use.local
+  resolution: "@gcsim/wfpworkers@workspace:packages/wfpworkers"
+  dependencies:
+    "@cfworker/json-schema": ^1.12.5
+    "@cfworker/uuid": ^1.12.4
+    "@cloudflare/workers-types": ^4.20230115.0
+    "@types/pako": ^2.0.0
+    axios: ^1.6.7
+    itty-router: ^3.0.11
+    pako: ^2.1.0
+    typescript: ^4.8.4
+    wrangler: 2.0.22
   languageName: unknown
   linkType: soft
 
