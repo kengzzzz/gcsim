@@ -12,7 +12,7 @@ import (
 
 const healMod = 10000
 
-var a1Directive = []float64{0.0, 0.4, 0.7}
+var a1Directive = []float64{0.0, 0.65, 1.3}
 
 func (c *char) passive() {
 	// zeroes out healing from all other sources besides arlecchino's heal
@@ -37,14 +37,30 @@ func (c *char) passive() {
 
 func (c *char) a1OnKill() {
 	c.Core.Events.Subscribe(event.OnTargetDied, func(args ...interface{}) bool {
-		trg, ok := args[0].(*enemy.Enemy)
+		e, ok := args[0].(*enemy.Enemy)
 		// ignore if not an enemy
 		if !ok {
 			return false
 		}
-		if trg.StatusIsActive(directiveKey) {
-			c.ModifyHPDebtByRatio(0.7)
+
+		if !e.StatusIsActive(directiveKey) {
+			return false
 		}
+
+		level := e.GetTag(directiveKey)
+
+		newDebt := a1Directive[level] * c.MaxHP()
+		if c.StatusIsActive(directiveLimitKey) {
+			newDebt = min(c.skillDebtMax-c.skillDebt, newDebt)
+		}
+
+		if newDebt > 0 {
+			c.skillDebt += newDebt
+			c.ModifyHPDebtByAmount(newDebt)
+		}
+		e.RemoveTag(directiveKey)
+		e.RemoveTag(directiveSrcKey)
+		e.DeleteStatus(directiveKey)
 		return false
 	}, "arlechinno-a1-onkill")
 }

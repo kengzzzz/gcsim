@@ -168,7 +168,7 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 func (c *char) blooddebtBonus() float64 {
 	c1Bonus := 0.0
 	if c.Base.Cons >= 1 {
-		c1Bonus = 1.2
+		c1Bonus = 1.0
 	}
 	amt := (blooddebt[c.TalentLvlAttack()] + c1Bonus) * c.CurrentHPDebt() / c.MaxHP() * c.getTotalAtk()
 	return amt
@@ -186,9 +186,10 @@ func (c *char) bloodDebtConsumeCB(a combat.AttackCB) {
 		return
 	}
 
-	c.AddStatus(bloodDebtConsumeICDKey, 0.05*60, true)
+	// 0.03*60 = 1.8 rounded to 2 frames
+	c.AddStatus(bloodDebtConsumeICDKey, 2, true)
 
-	amt := -0.065 * c.CurrentHPDebt()
+	amt := -0.075 * c.CurrentHPDebt()
 
 	c.ModifyHPDebtByAmount(amt)
 
