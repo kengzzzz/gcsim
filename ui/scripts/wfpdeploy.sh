@@ -14,7 +14,7 @@ hash=$(git rev-parse HEAD)
 echo "hash is: $hash"
 cp ./packages/wfp/public/main.wasm "./packages/wfp/wasm/${hash}.wasm"
 # use rclone to sync so we get rid of any old ones
-rclone sync ./packages/wfp/wasm/ wfpr2:wfpsim/ --progress --config ~/.dotfiles/rclone/rclone.cfg
+rclone sync ./packages/wfp/wasm/ wfpr2:wfpsim/ --progress --config ~/.wfp_rclone.cfg
 
 # 3. publish worker scripts
 cd ./packages/wfpworkers
