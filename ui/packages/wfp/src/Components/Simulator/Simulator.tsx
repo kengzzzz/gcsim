@@ -23,7 +23,9 @@ export function Simulator({
   const [isReady, setReady] = React.useState<boolean | null>(null);
   React.useEffect(() => {
     const interval = setInterval(() => {
-      exec().ready().then(res => setReady(res))
+      exec()
+        .ready()
+        .then((res) => setReady(res));
     }, 250);
     return () => clearInterval(interval);
   }, [exec]);
