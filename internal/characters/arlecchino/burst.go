@@ -29,7 +29,7 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 		StrikeType: attacks.StrikeTypeDefault,
 		Element:    attributes.Pyro,
 		Durability: 25,
-		Mult:       burst[c.TalentLvlSkill()],
+		Mult:       burst[c.TalentLvlBurst()],
 	}
 	skillArea := combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 10)
 
