@@ -32,6 +32,7 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 		Mult:       burst[c.TalentLvlSkill()],
 	}
 	skillArea := combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 10)
+	c.QueueCharTask(c.absorbDirectives, burstHitmarks-1)
 	c.Core.QueueAttack(ai, skillArea, burstHitmarks, burstHitmarks)
 	c.QueueCharTask(c.nourishingCinders, burstHitmarks+1)
 	// add cooldown to sim
@@ -48,7 +49,7 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 }
 
 func (c *char) nourishingCinders() {
-	amt := c.CurrentHPDebt() + 3.0*c.getTotalAtk()
+	amt := 1.5*c.CurrentHPDebt() + 1.5*c.getTotalAtk()
 	c.Core.Player.Heal(player.HealInfo{
 		Caller:  c.Index,
 		Target:  c.Index,

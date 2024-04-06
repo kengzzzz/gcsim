@@ -12,7 +12,7 @@ import (
 
 const healMod = 10000
 
-var a1Directive = []float64{0.0, 0.4, 0.7}
+var a1Directive = []float64{0.0, 0.65, 1.3}
 
 func (c *char) passive() {
 	// zeroes out healing from all other sources besides arlecchino's heal
@@ -43,7 +43,7 @@ func (c *char) a1OnKill() {
 			return false
 		}
 		if trg.StatusIsActive(directiveKey) {
-			c.ModifyHPDebtByRatio(0.7)
+			c.ModifyHPDebtByRatio(1.3)
 		}
 		return false
 	}, "arlechinno-a1-onkill")

@@ -131,6 +131,6 @@ func (c *char) directiveTickFunc(src, count int, trg *enemy.Enemy) func() {
 
 func (c *char) debtLimit() {
 	c.AddStatus(directiveLimitKey, 35*60, true)
-	c.skillDebtMax = 0.8 * c.MaxHP()
+	c.skillDebtMax = 1.45 * c.MaxHP()
 	c.skillDebt = 0
 }

@@ -44,7 +44,7 @@ func NewWeapon(c *core.Core, char *character.CharWrapper, p info.WeaponProfile) 
 			if char.CurrentHPDebt() > 0 {
 				buff[attributes.DmgP] += hasBoL
 			}
-			if char.CurrentHPDebt() >= char.MaxHP()*0.2 {
+			if char.CurrentHPDebt() >= char.MaxHP()*0.3 {
 				buff[attributes.DmgP] += gteBoL
 			}
 			return buff, true
@@ -70,7 +70,7 @@ func NewWeapon(c *core.Core, char *character.CharWrapper, p info.WeaponProfile) 
 
 		char.AddStatus(buffICDKey, buffICD, true)
 
-		char.ModifyHPDebtByRatio(0.18)
+		char.ModifyHPDebtByRatio(0.25)
 
 		return false
 	}, fmt.Sprintf("crimsonmoonssemblance-%v", char.Base.Key.String()))
