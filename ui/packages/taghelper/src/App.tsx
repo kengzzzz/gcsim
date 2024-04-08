@@ -6,14 +6,14 @@ import {
   useToast,
 } from "@gcsim/components";
 import "@gcsim/components/src/index.css";
-import { db } from "@gcsim/types";
+import { Entry } from "@gcsim/types/src/generated/index.db";
 import axios from "axios";
 import React from "react";
 import { Route, Switch } from "wouter";
 
 function App({ id }: { id: string }) {
-  const [main, setMain] = React.useState<db.IEntry | null>(null);
-  const [data, setData] = React.useState<db.IEntry[]>([]);
+  const [main, setMain] = React.useState<Entry | null>(null);
+  const [data, setData] = React.useState<Entry[]>([]);
   const { toast } = useToast();
 
   React.useEffect(() => {
@@ -116,13 +116,13 @@ function App({ id }: { id: string }) {
               <Button
                 className="bg-yellow-600"
                 onClick={() => {
-                  copyReplace(e["_id"]);
+                  copyReplace(e._id ?? "");
                 }}
               >
                 Replace This
               </Button>
               <a
-                href={"https://gcsim.app/db/" + e["_id"]}
+                href={"https://gcsim.app/db/" + e._id}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -181,7 +181,7 @@ function App({ id }: { id: string }) {
   );
 }
 
-function Routes() {
+const Routes = (): JSX.Element => {
   return (
     <>
       <Switch>
@@ -192,6 +192,6 @@ function Routes() {
       </Switch>
     </>
   );
-}
+};
 
 export default Routes;
