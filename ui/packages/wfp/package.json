@@ -21,6 +21,7 @@
     "git-rev-sync": "^3.0.2",
     "rollup-plugin-visualizer": "^5.8.3",
     "vite": "^4.1.1",
-    "vite-tsconfig-paths": "^4.0.5"
+    "vite-tsconfig-paths": "^4.0.5",
+    "wrangler": "^3.48.0"
   }
 }

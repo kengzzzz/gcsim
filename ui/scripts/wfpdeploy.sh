@@ -2,7 +2,7 @@
 # because that's too big
 yarn workspace @gcsim/wfpsim build
 rm ./packages/wfp/dist/main.wasm
-wrangler pages deploy ./packages/wfp/dist --project-name="wfpsim" --branch="main"
+yarn workspace @gcsim/wfpsim wrangler pages deploy ./dist --project-name="wfpsim" --branch="main"
 
 # 2. upload the wasm to r2
 # clean out any exists
@@ -17,5 +17,4 @@ cp ./packages/wfp/public/main.wasm "./packages/wfp/wasm/${hash}.wasm"
 rclone sync ./packages/wfp/wasm/ wfpr2:wfpsim/ --progress --config ~/.wfp_rclone.cfg
 
 # 3. publish worker scripts
-cd ./packages/wfpworkers
-wrangler deploy
+yarn workspace @gcsim/wfpworkers wrangler deploy
