@@ -56,7 +56,7 @@ var (
 	attackFanAngles = [][]float64{{360}, {300}, {360}, {360, 360}, {360}, {360}}
 )
 
-const naBuffKey = "in-praise-of-shadows"
+const naBuffKey = "masque-of-the-red-death"
 const bloodDebtConsumeICDKey = "blooddebt-consume-icd"
 const normalHitNum = 6
 
@@ -92,7 +92,7 @@ func (c *char) naBuff() {
 		c.Core.Log.NewEvent("Bond of Life changed", glog.LogCharacterEvent, c.Index).
 			Write("arle_hp_debt", c.CurrentHPDebt()).
 			Write("arle_hp_debt%", c.CurrentHPDebt()/c.MaxHP())
-		if c.CurrentHPDebt() >= c.MaxHP()*0.2 {
+		if c.CurrentHPDebt() >= c.MaxHP()*0.3 {
 			// can't use negative duration or else `if .arlecchino.status.in-praise-of-shadows` won't work
 			c.AddStatus(naBuffKey, 999999, false)
 		} else {
