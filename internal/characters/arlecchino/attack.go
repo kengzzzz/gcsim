@@ -56,7 +56,7 @@ var (
 	attackFanAngles = [][]float64{{360}, {300}, {360}, {360, 360}, {360}, {360}}
 )
 
-const naBuffKey = "in-praise-of-shadows"
+const naBuffKey = "masque-of-the-red-death"
 const bloodDebtConsumeICDKey = "blooddebt-consume-icd"
 const normalHitNum = 6
 
