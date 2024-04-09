@@ -92,7 +92,7 @@ func (c *char) naBuff() {
 		c.Core.Log.NewEvent("Bond of Life changed", glog.LogCharacterEvent, c.Index).
 			Write("arle_hp_debt", c.CurrentHPDebt()).
 			Write("arle_hp_debt%", c.CurrentHPDebt()/c.MaxHP())
-		if c.CurrentHPDebt() >= c.MaxHP()*0.2 {
+		if c.CurrentHPDebt() >= c.MaxHP()*0.3 {
 			// can't use negative duration or else `if .arlecchino.status.in-praise-of-shadows` won't work
 			c.AddStatus(naBuffKey, 999999, false)
 		} else {
