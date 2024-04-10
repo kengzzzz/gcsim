@@ -21,7 +21,6 @@ type Set struct {
 	stacks int
 	core   *core.Core
 	char   *character.CharWrapper
-	buff   []float64
 	Index  int
 }
 
