@@ -21,6 +21,8 @@ const App = ({id, src}: {id: string; src: string}) => {
   const [data, setData] = React.useState<SimulationResult | undefined>(
     undefined,
   );
+  const [loaded, setLoaded] = React.useState(0);
+  const [completed, setCompleted] = React.useState(false);
   React.useEffect(() => {
     //https://gcsim.app/api/share/db/nFLhjtD9dfFN
     axios
@@ -37,6 +39,15 @@ const App = ({id, src}: {id: string; src: string}) => {
         setError(JSON.stringify(e));
       });
   }, []);
+  React.useEffect(() => {
+    if (loaded >= (data?.character_details?.length ?? 0)) {
+      setCompleted(true);
+    }
+  }, [loaded]);
+
+  const handleOnImageLoaded = () => {
+    setLoaded(loaded + 1);
+  };
 
   if (err !== '') {
     return (
@@ -57,7 +68,16 @@ const App = ({id, src}: {id: string; src: string}) => {
 
   return (
     <ErrorBoundary fallbackRender={fallbackRender}>
-      <PreviewCard data={data} className="bg-red-800" />
+      {completed ? (
+        <span
+          className="hidden absolute top-0 left-0"
+          id="images_loaded"></span>
+      ) : null}
+      <PreviewCard
+        data={data}
+        className="bg-red-800"
+        onImageLoaded={handleOnImageLoaded}
+      />
     </ErrorBoundary>
   );
 };
