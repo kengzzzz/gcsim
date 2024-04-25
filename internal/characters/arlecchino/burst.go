@@ -6,7 +6,7 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/attacks"
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
-	"github.com/genshinsim/gcsim/pkg/core/player"
+	"github.com/genshinsim/gcsim/pkg/core/info"
 )
 
 const burstHitmarks = 114
@@ -51,7 +51,8 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 
 func (c *char) nourishingCinders() {
 	amt := 1.5*c.CurrentHPDebt() + 1.5*c.getTotalAtk()
-	c.Core.Player.Heal(player.HealInfo{
+	// call the template healing method directly to bypass Heal override
+	c.Character.Heal(&info.HealInfo{
 		Caller:  c.Index,
 		Target:  c.Index,
 		Message: "Nourishing Cinders",

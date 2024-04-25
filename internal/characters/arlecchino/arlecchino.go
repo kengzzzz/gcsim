@@ -66,3 +66,8 @@ func (c *char) getTotalAtk() float64 {
 	stats, _ := c.Stats()
 	return c.Base.Atk*(1+stats[attributes.ATKP]) + stats[attributes.ATK]
 }
+
+func (c *char) Heal(hi *info.HealInfo) (float64, float64) {
+	// block healing
+	return 0, 0
+}
