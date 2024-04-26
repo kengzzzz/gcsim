@@ -38,8 +38,11 @@ func init() {
 	skillFrames[action.ActionSkill] = 27
 
 	skillDashNoBOLFrames = frames.InitAbilSlice(28)
+	skillDashNoBOLFrames[action.ActionAttack] = 23
 	skillDashLowBOLFrames = frames.InitAbilSlice(28)
+	skillDashLowBOLFrames[action.ActionAttack] = 23
 	skillDashFullBOLFrames = frames.InitAbilSlice(28)
+	skillDashFullBOLFrames[action.ActionAttack] = 23
 }
 
 func (c *char) Skill(p map[string]int) (action.Info, error) {
@@ -91,14 +94,14 @@ func (c *char) skillDashNoBOL(_ map[string]int) (action.Info, error) {
 		Mult:       skillLungeNoBOL[c.TalentLvlSkill()],
 	}
 	// TODO: what's the size of this??
-	ap := combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 0.6)
+	ap := combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 0.6)
 	// TODO: assume no snapshotting on this
 	c.Core.QueueAttack(ai, ap, skillDashNoBOLHitmark, skillDashNoBOLHitmark, c.particleCB)
 	// TODO: no idea if this counts as a normal attack state or not. pretend it does for now
 	return action.Info{
 		Frames:          frames.NewAbilFunc(skillDashNoBOLFrames),
 		AnimationLength: skillDashNoBOLFrames[action.InvalidAction],
-		CanQueueAfter:   skillDashNoBOLFrames[action.InvalidAction], //TODO: fastest cancel?
+		CanQueueAfter:   skillDashNoBOLFrames[action.ActionAttack], //TODO: fastest cancel?
 		State:           action.NormalAttackState,
 	}, nil
 }
@@ -117,7 +120,7 @@ func (c *char) skillDashFullBOL(_ map[string]int) (action.Info, error) {
 			Mult:       skillLungeFullBOL[c.TalentLvlSkill()],
 		}
 		// TODO: what's the size of this??
-		ap := combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 0.8)
+		ap := combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 0.8)
 		// TODO: assume no snapshotting on this
 		c.Core.QueueAttack(ai, ap, skillDashFullBOLHitmark, skillDashFullBOLHitmark, c.particleCB)
 	}
@@ -129,7 +132,7 @@ func (c *char) skillDashFullBOL(_ map[string]int) (action.Info, error) {
 	return action.Info{
 		Frames:          frames.NewAbilFunc(skillDashFullBOLFrames),
 		AnimationLength: skillDashFullBOLFrames[action.InvalidAction],
-		CanQueueAfter:   skillDashFullBOLFrames[action.InvalidAction], //TODO: fastest cancel?
+		CanQueueAfter:   skillDashFullBOLFrames[action.ActionAttack], //TODO: fastest cancel?
 		State:           action.NormalAttackState,
 	}, nil
 }
@@ -147,7 +150,7 @@ func (c *char) skillDashRegular(_ map[string]int) (action.Info, error) {
 		Mult:       skillLungeLowBOL[c.TalentLvlSkill()],
 	}
 	// TODO: what's the size of this??
-	ap := combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 0.8)
+	ap := combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 0.8)
 	// TODO: assume no snapshotting on this
 	c.Core.QueueAttack(ai, ap, skillDashLowBOLHitmark, skillDashLowBOLHitmark, c.particleCB)
 
@@ -158,7 +161,7 @@ func (c *char) skillDashRegular(_ map[string]int) (action.Info, error) {
 	return action.Info{
 		Frames:          frames.NewAbilFunc(skillDashLowBOLFrames),
 		AnimationLength: skillDashLowBOLFrames[action.InvalidAction],
-		CanQueueAfter:   skillDashLowBOLFrames[action.InvalidAction], //TODO: fastest cancel?
+		CanQueueAfter:   skillDashLowBOLFrames[action.ActionAttack], //TODO: fastest cancel?
 		State:           action.NormalAttackState,
 	}, nil
 }

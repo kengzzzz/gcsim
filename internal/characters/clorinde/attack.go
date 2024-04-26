@@ -42,6 +42,7 @@ func init() {
 	attackFrames[4] = frames.InitNormalCancelSlice(attackHitmarks[4][0], 56)
 
 	skillAttackFrames = frames.InitAbilSlice(18) // TODO: this is a rough estimate
+	skillAttackFrames[action.ActionSkill] = 13
 }
 
 func (c *char) Attack(p map[string]int) (action.Info, error) {
@@ -106,8 +107,8 @@ func (c *char) skillAttack(_ map[string]int) (action.Info, error) {
 		Mult:       skillLungeNoBOL[c.TalentLvlSkill()],
 	}
 	t := c.Core.Combat.PrimaryTarget()
-	// TODO: what's the size of this??
-	ap := combat.NewCircleHitOnTarget(t, nil, 0.6)
+	// TODO: assume this is just a big rectangle center on target
+	ap := combat.NewBoxHitOnTarget(t, nil, 2, 14)
 	// TODO: assume no snapshotting on this
 	c.Core.QueueAttack(ai, ap, skillAttackHitmark, skillAttackHitmark)
 
@@ -117,7 +118,7 @@ func (c *char) skillAttack(_ map[string]int) (action.Info, error) {
 	return action.Info{
 		Frames:          frames.NewAbilFunc(skillAttackFrames),
 		AnimationLength: skillAttackFrames[action.InvalidAction],
-		CanQueueAfter:   skillAttackFrames[action.InvalidAction], //TODO: fastest cancel?
+		CanQueueAfter:   skillAttackFrames[action.ActionSkill], //TODO: fastest cancel?
 		State:           action.NormalAttackState,
 	}, nil
 }
