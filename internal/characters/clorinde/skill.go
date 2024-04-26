@@ -10,6 +10,7 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
 	"github.com/genshinsim/gcsim/pkg/core/combat"
 	"github.com/genshinsim/gcsim/pkg/core/info"
+	"github.com/genshinsim/gcsim/pkg/core/targets"
 )
 
 var (
@@ -20,8 +21,10 @@ var (
 )
 
 const (
-	skillStateKey = "clorinde-night-watch"
-	tolerance     = 0.0000001
+	skillStateKey  = "clorinde-night-watch"
+	tolerance      = 0.0000001
+	skillCD        = 16 * 60
+	particleICDKey = "clorinde-particle-icd"
 
 	// TODO: all hit marks
 	skillDashNoBOLHitmark   = 24
@@ -48,6 +51,8 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 
 	c.AddStatus(skillStateKey, 60*int(skillStateDuration[0]), true)
 
+	c.SetCD(action.ActionSkill, skillCD)
+
 	return action.Info{
 		Frames:          frames.NewAbilFunc(skillFrames),
 		AnimationLength: skillFrames[action.InvalidAction],
@@ -60,17 +65,13 @@ func (c *char) skillDash(p map[string]int) (action.Info, error) {
 	// depending on BOL lvl it does either 1 hit or 3 hit
 	ratio := c.currentHPDebtRatio()
 	switch {
-	case math.Abs(ratio-1) < tolerance:
+	case ratio >= 1:
 		return c.skillDashFullBOL(p)
 	case math.Abs(ratio) < tolerance:
 		return c.skillDashNoBOL(p)
 	default:
 		return c.skillDashRegular(p)
 	}
-}
-
-func (c *char) currentHPDebtRatio() float64 {
-	return c.CurrentHPDebt() / c.MaxHP()
 }
 
 func (c *char) gainBOLOnAttack() {
@@ -92,7 +93,7 @@ func (c *char) skillDashNoBOL(_ map[string]int) (action.Info, error) {
 	// TODO: what's the size of this??
 	ap := combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 0.6)
 	// TODO: assume no snapshotting on this
-	c.Core.QueueAttack(ai, ap, skillDashNoBOLHitmark, skillDashNoBOLHitmark)
+	c.Core.QueueAttack(ai, ap, skillDashNoBOLHitmark, skillDashNoBOLHitmark, c.particleCB)
 	// TODO: no idea if this counts as a normal attack state or not. pretend it does for now
 	return action.Info{
 		Frames:          frames.NewAbilFunc(skillDashNoBOLFrames),
@@ -118,11 +119,11 @@ func (c *char) skillDashFullBOL(_ map[string]int) (action.Info, error) {
 		// TODO: what's the size of this??
 		ap := combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 0.8)
 		// TODO: assume no snapshotting on this
-		c.Core.QueueAttack(ai, ap, skillDashFullBOLHitmark, skillDashFullBOLHitmark)
+		c.Core.QueueAttack(ai, ap, skillDashFullBOLHitmark, skillDashFullBOLHitmark, c.particleCB)
 	}
 
 	// TODO: timing on this heal?
-	c.skillHeal(skillLungeFullBOLHeal[0])
+	c.skillHeal(skillLungeFullBOLHeal[0], "skill (>= 100%)")
 
 	// TODO: no idea if this counts as a normal attack state or not. pretend it does for now
 	return action.Info{
@@ -148,10 +149,10 @@ func (c *char) skillDashRegular(_ map[string]int) (action.Info, error) {
 	// TODO: what's the size of this??
 	ap := combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 0.8)
 	// TODO: assume no snapshotting on this
-	c.Core.QueueAttack(ai, ap, skillDashLowBOLHitmark, skillDashLowBOLHitmark)
+	c.Core.QueueAttack(ai, ap, skillDashLowBOLHitmark, skillDashLowBOLHitmark, c.particleCB)
 
 	// TODO: timing on this heal?
-	c.skillHeal(skillLungeLowBOLHeal[0])
+	c.skillHeal(skillLungeLowBOLHeal[0], "skill (< 100%)")
 
 	// TODO: no idea if this counts as a normal attack state or not. pretend it does for now
 	return action.Info{
@@ -162,13 +163,25 @@ func (c *char) skillDashRegular(_ map[string]int) (action.Info, error) {
 	}, nil
 }
 
-func (c *char) skillHeal(bolMult float64) {
+func (c *char) skillHeal(bolMult float64, msg string) {
 	amt := c.CurrentHPDebt() * bolMult
-	c.Character.Heal(&info.HealInfo{
+	c.heal(&info.HealInfo{
 		Caller:  c.Index,
 		Target:  c.Index,
-		Message: "Clorinde Skill", // TODO: fix naming...
+		Message: msg,
 		Src:     amt,
 		Bonus:   c.Stat(attributes.Heal), // TODO: confirms that it scales with healing %
 	})
+}
+
+func (c *char) particleCB(a combat.AttackCB) {
+	if a.Target.Type() != targets.TargettableEnemy {
+		return
+	}
+	if c.StatusIsActive(particleICDKey) {
+		return
+	}
+	c.AddStatus(particleICDKey, 2*60, true)
+
+	c.Core.QueueParticle(c.Base.Key.String(), 1, attributes.Electro, c.ParticleDelay)
 }

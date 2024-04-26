@@ -13,8 +13,8 @@ skill_data_mapping:
       - 0 # 1-Hit DMG|{param0:F1P}
     attack_2:
       - 1 # 2-Hit DMG|{param1:F1P}
-      - 2 # 3-Hit DMG|{param2:F1P}+{param3:F1P}
     attack_3:
+      - 2 # 3-Hit DMG|{param2:F1P}+{param3:F1P}
       - 3 # 3-Hit DMG|{param2:F1P}+{param3:F1P}
     attack_4:
       - 4 # 4-Hit DMG|{param4:F1P}+{param5:F1P}+{param6:F1P}
@@ -57,14 +57,14 @@ skill_data_mapping:
       - 10
     skillStateDuration:
       - 11
-    skillCD:
-      - 12
+    # skillCD:
+    #   - 12
   burst: # Last Lightfall
     burstDamage:
       - 0 # Skill DMG|{param0:F1P}×5
     burstBOL:
       - 1 # Bond of Life Obtained|{param1:F1P} Max HP
-    burstCD:
-      - 3 # CD|{param3:F1}s
+    # burstCD:
+    #   - 3 # CD|{param3:F1}s
 #     burstEnergy:
 #       - 4 # Energy Cost|{param4:I}

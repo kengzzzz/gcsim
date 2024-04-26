@@ -14,11 +14,11 @@ import (
 var (
 	attackFrames [][]int
 	// TODO: these are made up hitmarks
-	attackHitmarks        = [][]int{{5}, {5, 5}, {5}, {37, 38, 39}, {30}}
-	attackHitlagHaltFrame = [][]float64{{0.03}, {0.03, 0.03}, {0.03}, {0.02, 0.02, 0.02}, {0.03}}
-	attackHitlagFactor    = [][]float64{{0.01}, {0.01, 0.01}, {0.01}, {0.05, 0.05, 0.05}, {0.05}}
-	attackDefHalt         = [][]bool{{true}, {true, true}, {true}, {true, true, true}, {true}}
-	attackHitboxes        = [][]float64{{1.7}, {2.1, 2.1}, {1.9}, {2, 3.5}, {2.5}} // n4 is a box
+	attackHitmarks        = [][]int{{17}, {12}, {27, 31}, {16, 22, 23}, {18}}
+	attackHitlagHaltFrame = [][]float64{{0.03}, {0.03}, {0.03, 0.03}, {0.02, 0.02, 0.02}, {0.03}}
+	attackHitlagFactor    = [][]float64{{0.01}, {0.01}, {0.01, 0.01}, {0.05, 0.05, 0.05}, {0.05}}
+	attackDefHalt         = [][]bool{{true}, {true}, {true, true}, {true, true, true}, {true}}
+	attackHitboxes        = [][]float64{{1.7}, {1.9}, {2.1, 2.1}, {2, 3.5}, {2.5}} // n4 is a box
 	attackOffsets         = []float64{1.1, 1.3, 1.2, 1.3, 1.4}
 
 	skillAttackFrames []int
@@ -33,18 +33,13 @@ const normalHitNum = 5
 func init() {
 	attackFrames = make([][]int, normalHitNum)
 
-	//TODO: these are all chiori frames
+	//TODO: these frames are just basically random guesses
 
-	attackFrames[0] = frames.InitNormalCancelSlice(attackHitmarks[0][0], 22) // N1 -> CA
-
-	attackFrames[1] = frames.InitNormalCancelSlice(attackHitmarks[1][1], 33) // N2 -> CA
-
-	attackFrames[2] = frames.InitNormalCancelSlice(attackHitmarks[2][0], 42) // N3 -> CA
-
-	attackFrames[3] = frames.InitNormalCancelSlice(attackHitmarks[3][2], 42) // N4 -> CA
-
-	attackFrames[4] = frames.InitNormalCancelSlice(attackHitmarks[4][0], 59) // N5 -> N1
-	attackFrames[4][action.ActionCharge] = 500                               // TODO: this action is illegal; need better way to handle it
+	attackFrames[0] = frames.InitNormalCancelSlice(attackHitmarks[0][0], 20)
+	attackFrames[1] = frames.InitNormalCancelSlice(attackHitmarks[1][0], 15)
+	attackFrames[2] = frames.InitNormalCancelSlice(attackHitmarks[2][1], 42)
+	attackFrames[3] = frames.InitNormalCancelSlice(attackHitmarks[3][2], 34)
+	attackFrames[4] = frames.InitNormalCancelSlice(attackHitmarks[4][0], 56)
 
 	skillAttackFrames = frames.InitAbilSlice(18) // TODO: this is a rough estimate
 }

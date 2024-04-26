@@ -11,7 +11,11 @@ import (
 
 var (
 	burstFrames   []int
-	burstHitmarks = []int{104, 110, 116}
+	burstHitmarks = []int{104, 110, 116, 122, 128}
+)
+
+const (
+	burstCD = 15 * 60
 )
 
 func init() {
@@ -38,6 +42,8 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 
 	// add bol?
 	c.ModifyHPDebtByRatio(burstBOL[c.TalentLvlBurst()])
+	c.SetCD(action.ActionBurst, burstCD)
+	c.ConsumeEnergy(6)
 
 	return action.Info{
 		Frames:          frames.NewAbilFunc(burstFrames),

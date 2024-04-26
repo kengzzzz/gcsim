@@ -1,0 +1,105 @@
+package clorinde
+
+import (
+	"math"
+
+	"github.com/genshinsim/gcsim/pkg/core/attacks"
+	"github.com/genshinsim/gcsim/pkg/core/attributes"
+	"github.com/genshinsim/gcsim/pkg/core/combat"
+	"github.com/genshinsim/gcsim/pkg/core/event"
+	"github.com/genshinsim/gcsim/pkg/core/glog"
+	"github.com/genshinsim/gcsim/pkg/core/player/character"
+	"github.com/genshinsim/gcsim/pkg/enemy"
+	"github.com/genshinsim/gcsim/pkg/modifier"
+)
+
+const (
+	clorindeA1BuffKey      = `clorinde-a1-buff`
+	clordineA1BuffDuration = 15 * 60
+	clorindeA4BuffKey      = `clorinde-a4-buff`
+	clordineA4BuffDuration = 15 * 60
+)
+
+func (c *char) a1() {
+	if c.Base.Ascension < 1 {
+		return
+	}
+	c.a1stacks = newStackTracker(3, c.QueueCharTask, &c.Core.F)
+	// on electro reaction, add buff; 3 stacks independent
+	c.Core.Events.Subscribe(event.OnElectroCharged, c.a1CB, "clorinde-a2-ec")
+	c.Core.Events.Subscribe(event.OnSuperconduct, c.a1CB, "clorinde-a2-superconduct")
+	c.Core.Events.Subscribe(event.OnAggravate, c.a1CB, "clorinde-a2-aggravate")
+	c.Core.Events.Subscribe(event.OnQuicken, c.a1CB, "clorinde-a2-quicken")
+	c.Core.Events.Subscribe(event.OnHyperbloom, c.a1CB, "clorinde-a2-hb")
+	c.Core.Events.Subscribe(event.OnOverload, c.a1CB, "clorinde-a2-overload")
+	c.Core.Events.Subscribe(event.OnSwirlElectro, c.a1CB, "clorinde-a2-swirl-electro")
+	c.Core.Events.Subscribe(event.OnCrystallizeElectro, c.a1CB, "clorinde-a2-crystallize-electro")
+}
+
+func (c *char) a1CB(args ...interface{}) bool {
+	// no requirement who triggers other than that it must be against an enemy
+	if _, ok := args[0].(*enemy.Enemy); !ok {
+		return false
+	}
+	// add a stack and refresh the mod for 15s
+	c.a1stacks.Add(clordineA1BuffDuration)
+	c.AddAttackMod(character.AttackMod{
+		Base:   modifier.NewBaseWithHitlag(clorindeA1BuffKey, clordineA1BuffDuration),
+		Amount: c.a1Amount,
+	})
+
+	return false
+}
+
+func (c *char) a1Amount(atk *combat.AttackEvent, t combat.Target) ([]float64, bool) {
+	switch atk.Info.AttackTag {
+	case attacks.AttackTagNormal:
+	case attacks.AttackTagElementalBurst:
+	default:
+		return nil, false
+	}
+	// 17% of atk per stack, max of 1530
+	totalAtk := atk.Snapshot.BaseAtk*(1+atk.Snapshot.Stats[attributes.ATKP]) + atk.Snapshot.Stats[attributes.ATK]
+	amt := totalAtk * 0.17 * float64(c.a1stacks.Count())
+	if amt > 1530 {
+		amt = 1530
+	}
+	atk.Info.FlatDmg += amt
+	c.Core.Log.NewEvent("a1 adding flat dmg", glog.LogCharacterEvent, c.Index).
+		Write("amt", amt)
+	// we don't actually change any stats here..
+	return nil, true
+}
+
+func (c *char) a4Init() {
+	if c.Base.Ascension < 4 {
+		return
+	}
+	c.a4stacks = newStackTracker(2, c.QueueCharTask, &c.Core.F)
+	c.a4bonus = make([]float64, attributes.EndStatType)
+}
+
+func (c *char) a4(change float64) {
+	// if BOL > 100%, then on BOL change, add 15s buff; 2 stacks each tracked independently
+	if c.Base.Ascension < 4 {
+		return
+	}
+	if c.currentHPDebtRatio() < 1 {
+		return
+	}
+	if math.Abs(change) < tolerance {
+		return
+	}
+	c.a4stacks.Add(clordineA4BuffDuration)
+	c.AddStatMod(character.StatMod{
+		Base:   modifier.NewBaseWithHitlag(clorindeA4BuffKey, clordineA4BuffDuration),
+		Amount: c.a4Amount,
+	})
+	c.Core.Log.NewEvent("a4 triggered", glog.LogCharacterEvent, c.Index).
+		Write("stacks", c.a4stacks.Count())
+}
+
+func (c *char) a4Amount() ([]float64, bool) {
+	c.a4bonus[attributes.CR] = float64(c.a4stacks.Count()) * .15
+	return c.a4bonus, true
+}

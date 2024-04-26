@@ -4,7 +4,6 @@ import (
 	tmpl "github.com/genshinsim/gcsim/internal/template/character"
 	"github.com/genshinsim/gcsim/pkg/core"
 	"github.com/genshinsim/gcsim/pkg/core/action"
-	"github.com/genshinsim/gcsim/pkg/core/glog"
 	"github.com/genshinsim/gcsim/pkg/core/info"
 	"github.com/genshinsim/gcsim/pkg/core/keys"
 	"github.com/genshinsim/gcsim/pkg/core/player/character"
@@ -17,6 +16,13 @@ func init() {
 
 type char struct {
 	*tmpl.Character
+
+	a1stacks *stackTracker
+	a4stacks *stackTracker
+	a4bonus  []float64
+
+	// track bol manually skip template
+	hpDebt float64
 }
 
 func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) error {
@@ -33,12 +39,14 @@ func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) er
 }
 
 func (c *char) Init() error {
+	c.a1()
+	c.a4Init()
 	return nil
 }
 
 func (c *char) ActionReady(a action.Action, p map[string]int) (bool, action.Failure) {
 	// check if a1 window is active is on-field
-	if a == action.ActionSkill && c.StatusIsActive("??") {
+	if a == action.ActionSkill && c.StatusIsActive(skillStateKey) {
 		return true, action.NoFailure
 	}
 	return c.Character.ActionReady(a, p)
@@ -54,26 +62,4 @@ func (c *char) AnimationStartDelay(k model.AnimationDelayKey) int {
 	default:
 		return c.Character.AnimationStartDelay(k)
 	}
-}
-
-func (c *char) Heal(h *info.HealInfo) (float64, float64) {
-	// no healing if in skill state; otherwise behave as normal
-	if !c.StatusIsActive(skillStateKey) {
-		return c.Character.Heal(h)
-	}
-
-	// amount is converted into bol
-	factor := skillBOLGain[c.TalentLvlSkill()]
-	if c.Base.Ascension >= 4 {
-		factor = 1
-	}
-
-	hp, bonus := c.CalcHealAmount(h)
-	amt := hp * bonus * factor
-	c.ModifyHPDebtByAmount(amt)
-
-	c.Core.Log.NewEvent("chlorinde healing surpressed", glog.LogHealEvent, c.Index).
-		Write("bol_amount", amt)
-
-	return 0, 0
 }
