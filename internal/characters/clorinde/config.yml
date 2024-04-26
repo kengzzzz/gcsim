@@ -53,8 +53,8 @@ skill_data_mapping:
       - 8 # Bond of Life Gained From Healing|{param8:P} Healed Amount
     arkheDamage:
       - 9 # Surging Blade DMG|{param9:F1P}
-    # skillStateDuration:
-    #   - 10
+    arkheCD:
+      - 10
     skillStateDuration:
       - 11
     skillCD:

@@ -252,6 +252,24 @@ var (
 		3.240537,
 		3.418915,
 	}
+	// skill: arkheCD = [10]
+	arkheCD = []float64{
+		10,
+		10,
+		10,
+		10,
+		10,
+		10,
+		10,
+		10,
+		10,
+		10,
+		10,
+		10,
+		10,
+		10,
+		10,
+	}
 	// skill: arkheDamage = [9]
 	arkheDamage = []float64{
 		0.432,
