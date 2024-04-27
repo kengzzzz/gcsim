@@ -1,7 +1,6 @@
 package clorinde
 
 import (
-	"fmt"
 	"math"
 
 	"github.com/genshinsim/gcsim/internal/frames"
@@ -110,7 +109,7 @@ func (c *char) skillDashFullBOL(_ map[string]int) (action.Info, error) {
 	for i := 0; i < 3; i++ {
 		ai := combat.AttackInfo{
 			ActorIndex: c.Index,
-			Abil:       fmt.Sprintf("Skill Dash (Full BOL): %v", i+1),
+			Abil:       "Skill Dash (Full BOL)",
 			AttackTag:  attacks.AttackTagNormal,
 			ICDTag:     attacks.ICDTagNormalAttack,
 			ICDGroup:   attacks.ICDGroupDefault,

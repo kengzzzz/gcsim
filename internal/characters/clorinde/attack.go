@@ -97,18 +97,26 @@ func (c *char) skillAttack(_ map[string]int) (action.Info, error) {
 	// TODO: not sure if we need a counter here
 	ai := combat.AttackInfo{
 		ActorIndex: c.Index,
-		Abil:       "Skill Dash (No BOL)",
+		Abil:       "Piercing Shot",
 		AttackTag:  attacks.AttackTagNormal,
 		ICDTag:     attacks.ICDTagNormalAttack,
 		ICDGroup:   attacks.ICDGroupDefault,
 		StrikeType: attacks.StrikeTypeSlash,
 		Element:    attributes.Electro,
 		Durability: 25,
-		Mult:       skillLungeNoBOL[c.TalentLvlSkill()],
+		Mult:       skillEnhancedNA[c.TalentLvlSkill()],
 	}
 	t := c.Core.Combat.PrimaryTarget()
-	// TODO: assume this is just a big rectangle center on target
-	ap := combat.NewBoxHitOnTarget(t, nil, 2, 14)
+	var ap combat.AttackPattern
+	if c.currentHPDebtRatio() < 1 {
+		// TODO: assume this is just a big rectangle center on target
+		ap = combat.NewBoxHitOnTarget(t, nil, 2, 14)
+	} else {
+		ai.Abil = "Normal Shot"
+		ai.Mult = skillNA[c.TalentLvlSkill()]
+		// TODO: how big is this??
+		ap = combat.NewCircleHitOnTarget(t, nil, 2)
+	}
 	// TODO: assume no snapshotting on this
 	c.Core.QueueAttack(ai, ap, skillAttackHitmark, skillAttackHitmark)
 
