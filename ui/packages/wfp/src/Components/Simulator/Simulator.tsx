@@ -1,8 +1,8 @@
-import { Button, ButtonGroup, Callout, Intent } from "@blueprintjs/core";
-import { Executor, ExecutorSupplier } from "@gcsim/executors";
-import { ActionList } from "@gcsim/ui/src/Pages/Simulator/Components";
-import { debounce } from "lodash-es";
-import React from "react";
+import {Button, ButtonGroup, Callout, Intent} from '@blueprintjs/core';
+import {Executor, ExecutorSupplier} from '@gcsim/executors';
+import {ActionList} from '@gcsim/ui/src/Pages/Simulator/Components';
+import {debounce} from 'lodash-es';
+import React from 'react';
 
 export function Simulator({
   exec,
@@ -12,11 +12,11 @@ export function Simulator({
   run: (string) => void;
 }) {
   const [cfg, setCfg] = React.useState<string>(() => {
-    const localData = localStorage.getItem("cfg");
-    return localData ? localData : "";
+    const localData = localStorage.getItem('cfg');
+    return localData ? localData : '';
   });
   React.useEffect(() => {
-    localStorage.setItem("cfg", cfg);
+    localStorage.setItem('cfg', cfg);
   }, [cfg]);
 
   // check worker ready state every 250ms so run button becomes available when workers do
@@ -29,7 +29,7 @@ export function Simulator({
     }, 250);
     return () => clearInterval(interval);
   }, [exec]);
-  const [err, setErr] = React.useState("");
+  const [err, setErr] = React.useState('');
 
   const validated = useConfigValidateListener(exec, cfg, isReady, setErr);
   const onChange = (next: string) => {
@@ -43,22 +43,23 @@ export function Simulator({
         implemented in gcsim that we have added here:
         <ul className="list-disc pl-4">
           <li>Arlecchino</li>
+          <li>Clorinde</li>
+          <li>Sethos</li>
         </ul>
         <p className=" font-bold">
-          See{" "}
+          See{' '}
           <a
             href="https://gist.github.com/ac1dgit/89c92d666fb5805266797af635d56464"
             target="_blank"
-            rel="noopener noreferrer"
-          >
+            rel="noopener noreferrer">
             here
-          </a>{" "}
+          </a>{' '}
           for all implementation assumptions for pre-release characters
         </p>
       </div>
       <ActionList cfg={cfg} onChange={onChange} />
       <div className="sticky bottom-0 flex flex-col gap-y-1 bg-[#450a0a]">
-        {err !== "" && cfg !== "" ? (
+        {err !== '' && cfg !== '' ? (
           <div className="pl-2 pr-2 pt-2 mt-1">
             <Callout intent={Intent.DANGER} title="Error: Config Invalid">
               <pre className="whitespace-pre-wrap pl-5">{err}</pre>
@@ -73,8 +74,8 @@ export function Simulator({
               className="!basis-full md:!basis-1/2"
               onClick={() => run(cfg)}
               loading={!isReady}
-              disabled={err !== "" && !validated}
-              text={"Run"}
+              disabled={err !== '' && !validated}
+              text={'Run'}
             />
           </ButtonGroup>
         </div>
@@ -87,7 +88,7 @@ export function useConfigValidateListener(
   exec: ExecutorSupplier<Executor>,
   cfg: string,
   isReady: boolean | null,
-  setErr: (str: string) => void
+  setErr: (str: string) => void,
 ): boolean {
   const [validated, setValidated] = React.useState(false);
   const debounced = React.useRef(debounce((x: () => void) => x(), 200));
@@ -97,7 +98,7 @@ export function useConfigValidateListener(
       return;
     }
 
-    if (cfg === "") {
+    if (cfg === '') {
       return;
     }
 
@@ -107,13 +108,13 @@ export function useConfigValidateListener(
         .validate(cfg)
         .then(
           (res) => {
-            console.log("all is good");
-            setErr("");
+            console.log('all is good');
+            setErr('');
             //check if there are any warning msgs
             if (res.errors) {
-              let msg = "";
+              let msg = '';
               res.errors.forEach((err) => {
-                msg += err + "\n";
+                msg += err + '\n';
               });
               setErr(msg);
             }
@@ -123,7 +124,7 @@ export function useConfigValidateListener(
             //set error state
             setErr(err);
             setValidated(false);
-          }
+          },
         );
     });
   }, [exec, cfg, setErr, isReady]);
