@@ -100,6 +100,6 @@ func (c *char) a4(change float64) {
 }
 
 func (c *char) a4Amount() ([]float64, bool) {
-	c.a4bonus[attributes.CR] = float64(c.a4stacks.Count()) * .15
+	c.a4bonus[attributes.CR] = float64(c.a4stacks.Count()) * .10
 	return c.a4bonus, true
 }
