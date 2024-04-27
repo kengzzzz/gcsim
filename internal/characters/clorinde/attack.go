@@ -96,15 +96,16 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 func (c *char) skillAttack(_ map[string]int) (action.Info, error) {
 	// TODO: not sure if we need a counter here
 	ai := combat.AttackInfo{
-		ActorIndex: c.Index,
-		Abil:       "Piercing Shot",
-		AttackTag:  attacks.AttackTagNormal,
-		ICDTag:     attacks.ICDTagNormalAttack,
-		ICDGroup:   attacks.ICDGroupDefault,
-		StrikeType: attacks.StrikeTypeSlash,
-		Element:    attributes.Electro,
-		Durability: 25,
-		Mult:       skillEnhancedNA[c.TalentLvlSkill()],
+		ActorIndex:     c.Index,
+		Abil:           "Piercing Shot",
+		AttackTag:      attacks.AttackTagNormal,
+		ICDTag:         attacks.ICDTagNormalAttack,
+		ICDGroup:       attacks.ICDGroupDefault,
+		StrikeType:     attacks.StrikeTypeSlash,
+		Element:        attributes.Electro,
+		Durability:     25,
+		Mult:           skillEnhancedNA[c.TalentLvlSkill()],
+		IgnoreInfusion: true,
 	}
 	t := c.Core.Combat.PrimaryTarget()
 	var ap combat.AttackPattern
