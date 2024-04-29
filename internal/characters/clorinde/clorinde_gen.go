@@ -505,3 +505,16 @@ var (
 		3.0134,
 	}
 )
+
+const (
+	// a1: a1Duration = [0]
+	a1Duration float64 = 15
+	// a1: a1FlatDmg = [1]
+	a1FlatDmg float64 = 1530
+	// a1: a1PercentBuff = [2]
+	a1PercentBuff float64 = 0.17
+	// a4: a4CritBuff = [2]
+	a4CritBuff float64 = 0.1
+	// a4: a4Duration = [3]
+	a4Duration float64 = 15
+)

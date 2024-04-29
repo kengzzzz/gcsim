@@ -15,9 +15,9 @@ import (
 
 const (
 	clorindeA1BuffKey      = `clorinde-a1-buff`
-	clordineA1BuffDuration = 15 * 60
+	clordineA1BuffDuration = int(a1Duration * 60)
 	clorindeA4BuffKey      = `clorinde-a4-buff`
-	clordineA4BuffDuration = 15 * 60
+	clordineA4BuffDuration = int(a4Duration * 60)
 )
 
 func (c *char) a1() {
@@ -64,8 +64,8 @@ func (c *char) a1Amount(atk *combat.AttackEvent, t combat.Target) ([]float64, bo
 	}
 	// 17% of atk per stack, max of 1530
 	totalAtk := atk.Snapshot.BaseAtk*(1+atk.Snapshot.Stats[attributes.ATKP]) + atk.Snapshot.Stats[attributes.ATK]
-	amt := totalAtk * 0.17 * float64(c.a1stacks.Count())
-	if amt > 1530 {
+	amt := totalAtk * a1PercentBuff * float64(c.a1stacks.Count())
+	if amt > a1FlatDmg {
 		amt = 1530
 	}
 	atk.Info.FlatDmg += amt
@@ -104,6 +104,6 @@ func (c *char) a4(change float64) {
 }
 
 func (c *char) a4Amount() ([]float64, bool) {
-	c.a4bonus[attributes.CR] = float64(c.a4stacks.Count()) * .10
+	c.a4bonus[attributes.CR] = float64(c.a4stacks.Count()) * a4CritBuff
 	return c.a4bonus, true
 }

@@ -8,6 +8,18 @@ key: clorinde
 #       [1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 #     damage_sequence: [1, 1, 1, 1, 1]
 skill_data_mapping:
+  a1:
+    a1FlatDmg:
+      - 1
+    a1PercentBuff:
+      - 2
+    a1Duration:
+      - 0
+  a4:
+    a4CritBuff:
+      - 2
+    a4Duration:
+      - 3
   attack: # Normal Attack: Marechaussee Creed
     attack_1:
       - 0 # 1-Hit DMG|{param0:F1P}
