@@ -54,6 +54,10 @@ func (c *char) a1CB(args ...interface{}) bool {
 func (c *char) a1Amount(atk *combat.AttackEvent, t combat.Target) ([]float64, bool) {
 	switch atk.Info.AttackTag {
 	case attacks.AttackTagNormal:
+		if atk.Info.Element != attributes.Electro {
+			// only app
+			return nil, false
+		}
 	case attacks.AttackTagElementalBurst:
 	default:
 		return nil, false
