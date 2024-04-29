@@ -7,9 +7,11 @@ import React from 'react';
 export function Simulator({
   exec,
   run,
+  openSettings,
 }: {
   exec: ExecutorSupplier<Executor>;
   run: (string) => void;
+  openSettings?: () => void;
 }) {
   const [cfg, setCfg] = React.useState<string>(() => {
     const localData = localStorage.getItem('cfg');
@@ -68,6 +70,14 @@ export function Simulator({
         ) : null}
         <div className="p-2 wide:ml-2 wide:mr-2 flex flex-row flex-wrap place-items-center gap-x-1 gap-y-1">
           <ButtonGroup className="basis-full wide:basis-2/3 p-1 flex flex-row flex-wrap">
+            {openSettings === undefined ? null : (
+              <Button
+                className="!basis-full md:!basis-1/2"
+                icon="settings"
+                onClick={openSettings}
+                text={'Settings'}
+              />
+            )}
             <Button
               icon="play"
               intent="primary"
