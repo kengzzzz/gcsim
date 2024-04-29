@@ -101,7 +101,7 @@ func (c *char) skillDashNoBOL(_ map[string]int) (action.Info, error) {
 		Frames:          frames.NewAbilFunc(skillDashNoBOLFrames),
 		AnimationLength: skillDashNoBOLFrames[action.InvalidAction],
 		CanQueueAfter:   skillDashNoBOLFrames[action.ActionAttack], //TODO: fastest cancel?
-		State:           action.NormalAttackState,
+		State:           action.SkillState,
 	}, nil
 }
 
@@ -132,7 +132,7 @@ func (c *char) skillDashFullBOL(_ map[string]int) (action.Info, error) {
 		Frames:          frames.NewAbilFunc(skillDashFullBOLFrames),
 		AnimationLength: skillDashFullBOLFrames[action.InvalidAction],
 		CanQueueAfter:   skillDashFullBOLFrames[action.ActionAttack], //TODO: fastest cancel?
-		State:           action.NormalAttackState,
+		State:           action.SkillState,
 	}, nil
 }
 
@@ -161,7 +161,7 @@ func (c *char) skillDashRegular(_ map[string]int) (action.Info, error) {
 		Frames:          frames.NewAbilFunc(skillDashLowBOLFrames),
 		AnimationLength: skillDashLowBOLFrames[action.InvalidAction],
 		CanQueueAfter:   skillDashLowBOLFrames[action.ActionAttack], //TODO: fastest cancel?
-		State:           action.NormalAttackState,
+		State:           action.SkillState,
 	}, nil
 }
 
