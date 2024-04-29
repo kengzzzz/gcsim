@@ -8,7 +8,7 @@ import (
 
 func (c *char) Heal(hi *info.HealInfo) (float64, float64) {
 	// no healing if in skill state; otherwise behave as normal
-	if !c.StatusIsActive(skillStateKey) {
+	if c.StatusIsActive(skillStateKey) {
 		return c.convertHeal(hi)
 	}
 	return c.heal(hi)
