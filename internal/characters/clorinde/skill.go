@@ -88,15 +88,16 @@ func (c *char) gainBOLOnAttack() {
 
 func (c *char) skillDashNoBOL(_ map[string]int) (action.Info, error) {
 	ai := combat.AttackInfo{
-		ActorIndex: c.Index,
-		Abil:       "Skill Dash (No BOL)",
-		AttackTag:  attacks.AttackTagNormal,
-		ICDTag:     attacks.ICDTagNormalAttack,
-		ICDGroup:   attacks.ICDGroupDefault,
-		StrikeType: attacks.StrikeTypeSlash,
-		Element:    attributes.Electro,
-		Durability: 25,
-		Mult:       skillLungeNoBOL[c.TalentLvlSkill()],
+		ActorIndex:     c.Index,
+		Abil:           "Skill Dash (No BOL)",
+		AttackTag:      attacks.AttackTagNormal,
+		ICDTag:         attacks.ICDTagNormalAttack,
+		ICDGroup:       attacks.ICDGroupDefault,
+		StrikeType:     attacks.StrikeTypeSlash,
+		Element:        attributes.Electro,
+		Durability:     25,
+		Mult:           skillLungeNoBOL[c.TalentLvlSkill()],
+		IgnoreInfusion: true,
 	}
 	// TODO: what's the size of this??
 	ap := combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 0.6)
@@ -114,15 +115,16 @@ func (c *char) skillDashNoBOL(_ map[string]int) (action.Info, error) {
 func (c *char) skillDashFullBOL(_ map[string]int) (action.Info, error) {
 	for i := 0; i < 3; i++ {
 		ai := combat.AttackInfo{
-			ActorIndex: c.Index,
-			Abil:       "Skill Dash (Full BOL)",
-			AttackTag:  attacks.AttackTagNormal,
-			ICDTag:     attacks.ICDTagNormalAttack,
-			ICDGroup:   attacks.ICDGroupDefault,
-			StrikeType: attacks.StrikeTypeSlash,
-			Element:    attributes.Electro,
-			Durability: 25,
-			Mult:       skillLungeFullBOL[c.TalentLvlSkill()],
+			ActorIndex:     c.Index,
+			Abil:           "Skill Dash (Full BOL)",
+			AttackTag:      attacks.AttackTagNormal,
+			ICDTag:         attacks.ICDTagNormalAttack,
+			ICDGroup:       attacks.ICDGroupDefault,
+			StrikeType:     attacks.StrikeTypeSlash,
+			Element:        attributes.Electro,
+			Durability:     25,
+			Mult:           skillLungeFullBOL[c.TalentLvlSkill()],
+			IgnoreInfusion: true,
 		}
 		// TODO: what's the size of this??
 		ap := combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 0.8)
@@ -144,15 +146,16 @@ func (c *char) skillDashFullBOL(_ map[string]int) (action.Info, error) {
 
 func (c *char) skillDashRegular(_ map[string]int) (action.Info, error) {
 	ai := combat.AttackInfo{
-		ActorIndex: c.Index,
-		Abil:       "Skill Dash (< 100% BOL)",
-		AttackTag:  attacks.AttackTagNormal,
-		ICDTag:     attacks.ICDTagNormalAttack,
-		ICDGroup:   attacks.ICDGroupDefault,
-		StrikeType: attacks.StrikeTypeSlash,
-		Element:    attributes.Electro,
-		Durability: 25,
-		Mult:       skillLungeLowBOL[c.TalentLvlSkill()],
+		ActorIndex:     c.Index,
+		Abil:           "Skill Dash (< 100% BOL)",
+		AttackTag:      attacks.AttackTagNormal,
+		ICDTag:         attacks.ICDTagNormalAttack,
+		ICDGroup:       attacks.ICDGroupDefault,
+		StrikeType:     attacks.StrikeTypeSlash,
+		Element:        attributes.Electro,
+		Durability:     25,
+		Mult:           skillLungeLowBOL[c.TalentLvlSkill()],
+		IgnoreInfusion: true,
 	}
 	// TODO: what's the size of this??
 	ap := combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 0.8)
