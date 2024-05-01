@@ -68,18 +68,19 @@ func (c *char) a1Amount(atk *combat.AttackEvent, t combat.Target) ([]float64, bo
 		// 20% of atk per stack, max of 1800
 		amt = totalAtk * a1PercentBuff * float64(c.a1stacks.Count())
 		if amt > a1FlatDmg {
-			amt = 1800
+			amt = a1FlatDmg
 		}
 	} else {
 		// 30% of atk per stack, max of 2700
 		amt = totalAtk * c2A1PercentBuff * float64(c.a1stacks.Count())
 		if amt > c2A1FlatDmg {
-			amt = a1FlatDmg
+			amt = c2A1FlatDmg
 		}
 	}
 	atk.Info.FlatDmg += amt
 	c.Core.Log.NewEvent("a1 adding flat dmg", glog.LogCharacterEvent, c.Index).
-		Write("amt", amt)
+		Write("amt", amt).
+		Write("c2_applied", c.Base.Cons >= 2)
 	// we don't actually change any stats here..
 	return nil, true
 }
