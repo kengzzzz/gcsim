@@ -17,7 +17,7 @@ var (
 	skillDashNoBOLFrames   []int
 	skillDashLowBOLFrames  []int
 	skillDashFullBOLFrames []int
-	c6_stacks              int
+	c6Stacks               int
 )
 
 const (
@@ -51,7 +51,7 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 	if c.StatusIsActive(skillStateKey) {
 		return c.skillDash(p)
 	}
-	c6_stacks = 6
+	c6Stacks = 6
 	c.QueueCharTask(c.c6skill, 0)
 	c.AddStatus(skillStateKey, 60*int(skillStateDuration[0]), true)
 
@@ -70,9 +70,9 @@ func (c *char) skillDash(p map[string]int) (action.Info, error) {
 	ratio := c.currentHPDebtRatio()
 	switch {
 	case ratio >= 1:
-		if c.Base.Cons >= 6 && c6_stacks > 0 {
+		if c.Base.Cons >= 6 && c6Stacks > 0 {
 			c.c6()
-			c6_stacks -= 1
+			c6Stacks -= 1
 		}
 		return c.skillDashFullBOL(p)
 	case math.Abs(ratio) < tolerance:

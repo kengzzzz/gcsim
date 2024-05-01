@@ -103,15 +103,8 @@ func (c *char) c6skill() {
 	m[attributes.CR] = 0.1
 	m[attributes.CD] = 0.7
 	c.AddStatMod(character.StatMod{
-		Base:         modifier.NewBase("clorinde-c6-bonus-cr", 12*60),
+		Base:         modifier.NewBase("clorinde-c6-bonus", 12*60),
 		AffectedStat: attributes.CR,
-		Amount: func() ([]float64, bool) {
-			return m, true
-		},
-	})
-	c.AddStatMod(character.StatMod{
-		Base:         modifier.NewBase("clorinde-c6-bonus-cd", 12*60),
-		AffectedStat: attributes.CD,
 		Amount: func() ([]float64, bool) {
 			return m, true
 		},
