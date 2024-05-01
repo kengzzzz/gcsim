@@ -39,6 +39,16 @@ func (c *char) c1() {
 		if c.StatusIsActive(c1IcdKey) {
 			return false
 		}
+		atk := args[1].(*combat.AttackEvent)
+		if atk.Info.AttackTag != attacks.AttackTagNormal {
+			return false
+		}
+		if atk.Info.Element != attributes.Electro {
+			return false
+		}
+		if atk.Info.ActorIndex != c.Index {
+			return false
+		}
 		c.AddStatus(c1IcdKey, c1Icd, false)
 		c1AI := combat.AttackInfo{
 			ActorIndex: c.Index,
@@ -52,16 +62,13 @@ func (c *char) c1() {
 			Mult:       c1AtkP,
 		}
 		target := args[0].(combat.Target)
-		atk := args[1].(*combat.AttackEvent)
-		if atk.Info.AttackTag == attacks.AttackTagNormal {
-			for _, hitmark := range c1Hitmarks {
-				c.Core.QueueAttack(
-					c1AI,
-					combat.NewCircleHitOnTarget(target, nil, 4),
-					hitmark,
-					hitmark,
-				)
-			}
+		for _, hitmark := range c1Hitmarks {
+			c.Core.QueueAttack(
+				c1AI,
+				combat.NewCircleHitOnTarget(target, nil, 4),
+				hitmark,
+				hitmark,
+			)
 		}
 		return false
 	}, "clorinde-c1")
