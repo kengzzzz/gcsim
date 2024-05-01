@@ -24,6 +24,12 @@ func (c *char) a1() {
 	if c.Base.Ascension < 1 {
 		return
 	}
+	c.a1BuffPercent = a1PercentBuff
+	c.a1Cap = a1FlatDmg
+	if c.Base.Cons >= 2 {
+		c.a1BuffPercent = c2A1PercentBuff
+		c.a1Cap = c2A1FlatDmg
+	}
 	c.a1stacks = newStackTracker(3, c.QueueCharTask, &c.Core.F)
 	// on electro reaction, add buff; 3 stacks independent
 	c.Core.Events.Subscribe(event.OnElectroCharged, c.a1CB, "clorinde-a2-ec")
@@ -64,19 +70,7 @@ func (c *char) a1Amount(atk *combat.AttackEvent, t combat.Target) ([]float64, bo
 		return nil, false
 	}
 	totalAtk := atk.Snapshot.BaseAtk*(1+atk.Snapshot.Stats[attributes.ATKP]) + atk.Snapshot.Stats[attributes.ATK]
-	if c.Base.Cons < 2 {
-		// 20% of atk per stack, max of 1800
-		amt = totalAtk * a1PercentBuff * float64(c.a1stacks.Count())
-		if amt > a1FlatDmg {
-			amt = a1FlatDmg
-		}
-	} else {
-		// 30% of atk per stack, max of 2700
-		amt = totalAtk * c2A1PercentBuff * float64(c.a1stacks.Count())
-		if amt > c2A1FlatDmg {
-			amt = c2A1FlatDmg
-		}
-	}
+	amt = min(totalAtk*c.a1BuffPercent*float64(c.a1stacks.Count()), c.a1Cap)
 	atk.Info.FlatDmg += amt
 	c.Core.Log.NewEvent("a1 adding flat dmg", glog.LogCharacterEvent, c.Index).
 		Write("amt", amt).

@@ -17,9 +17,11 @@ func init() {
 type char struct {
 	*tmpl.Character
 
-	a1stacks *stackTracker
-	a4stacks *stackTracker
-	a4bonus  []float64
+	a1stacks      *stackTracker
+	a1BuffPercent float64
+	a1Cap         float64
+	a4stacks      *stackTracker
+	a4bonus       []float64
 
 	// track bol manually skip template
 	hpDebt float64

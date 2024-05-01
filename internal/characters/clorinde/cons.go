@@ -21,7 +21,7 @@ const (
 	c6GlimbrightAtkP           = 2
 )
 
-var c1_hitMarks = []int{1, 1} // TODO hitmark for each c1 hit
+var c1Hitmarks = []int{1, 1} // TODO hitmark for each c1 hit
 
 // While Hunt the Dark's Night Watch state is active,
 // when Electro DMG from Clorinde's Normal Attacks hit opponents,
@@ -40,12 +40,12 @@ func (c *char) c1() {
 			return false
 		}
 		c.AddStatus(c1IcdKey, c1Icd, false)
-		c1_ai := combat.AttackInfo{
+		c1AI := combat.AttackInfo{
 			ActorIndex: c.Index,
 			Abil:       "Nightwatch Shade (C1)",
 			AttackTag:  attacks.AttackTagNormal,
-			ICDTag:     attacks.ICDTagNone,
-			ICDGroup:   attacks.ICDGroupDefault,
+			ICDTag:     attacks.ICDTagNormalAttack,
+			ICDGroup:   attacks.ICDGroupClorindeElementalArt,
 			StrikeType: attacks.StrikeTypeDefault,
 			Element:    attributes.Electro,
 			Durability: 25,
@@ -54,9 +54,9 @@ func (c *char) c1() {
 		target := args[0].(combat.Target)
 		atk := args[1].(*combat.AttackEvent)
 		if atk.Info.AttackTag == attacks.AttackTagNormal {
-			for _, hitmark := range c1_hitMarks {
+			for _, hitmark := range c1Hitmarks {
 				c.Core.QueueAttack(
-					c1_ai,
+					c1AI,
 					combat.NewCircleHitOnTarget(target, nil, 4),
 					hitmark,
 					hitmark,
@@ -137,19 +137,19 @@ func (c *char) c6() {
 	}
 
 	c.AddStatus(c6GlimbrightIcdKey, 1*60, false)
-	c6_ai := combat.AttackInfo{
+	c6AI := combat.AttackInfo{
 		ActorIndex: c.Index,
 		Abil:       "Glimbright Shade (C6)",
 		AttackTag:  attacks.AttackTagNormal,
-		ICDTag:     attacks.ICDTagNone,
-		ICDGroup:   attacks.ICDGroupDefault,
+		ICDTag:     attacks.ICDTagNormalAttack,
+		ICDGroup:   attacks.ICDGroupClorindeElementalArt,
 		StrikeType: attacks.StrikeTypeDefault,
 		Element:    attributes.Electro,
 		Durability: 25,
 		Mult:       c6GlimbrightAtkP,
 	}
 	c.Core.QueueAttack(
-		c6_ai,
+		c6AI,
 		combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 4),
 		1, //TODO: c6 hitmark
 		1,
