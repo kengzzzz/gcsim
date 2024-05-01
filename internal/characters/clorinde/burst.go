@@ -23,7 +23,12 @@ func init() {
 }
 
 func (c *char) Burst(p map[string]int) (action.Info, error) {
+	// add bol?
+	c.ModifyHPDebtByRatio(burstBOL[c.TalentLvlBurst()])
 	for _, v := range burstHitmarks {
+		if c.Base.Cons >= 4 {
+			c.c4()
+		}
 		ai := combat.AttackInfo{
 			ActorIndex: c.Index,
 			Abil:       "Burst",
@@ -40,11 +45,8 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 		c.Core.QueueAttack(ai, ap, v, v)
 	}
 
-	// add bol?
-	c.ModifyHPDebtByRatio(burstBOL[c.TalentLvlBurst()])
 	c.SetCD(action.ActionBurst, burstCD)
 	c.ConsumeEnergy(6)
-
 	return action.Info{
 		Frames:          frames.NewAbilFunc(burstFrames),
 		AnimationLength: burstFrames[action.InvalidAction],

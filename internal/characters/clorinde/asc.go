@@ -52,6 +52,7 @@ func (c *char) a1CB(args ...interface{}) bool {
 }
 
 func (c *char) a1Amount(atk *combat.AttackEvent, t combat.Target) ([]float64, bool) {
+	var amt float64
 	switch atk.Info.AttackTag {
 	case attacks.AttackTagNormal:
 		if atk.Info.Element != attributes.Electro {
@@ -62,11 +63,19 @@ func (c *char) a1Amount(atk *combat.AttackEvent, t combat.Target) ([]float64, bo
 	default:
 		return nil, false
 	}
-	// 17% of atk per stack, max of 1530
 	totalAtk := atk.Snapshot.BaseAtk*(1+atk.Snapshot.Stats[attributes.ATKP]) + atk.Snapshot.Stats[attributes.ATK]
-	amt := totalAtk * a1PercentBuff * float64(c.a1stacks.Count())
-	if amt > a1FlatDmg {
-		amt = 1530
+	if c.Base.Cons < 2 {
+		// 20% of atk per stack, max of 1800
+		amt = totalAtk * a1PercentBuff * float64(c.a1stacks.Count())
+		if amt > a1FlatDmg {
+			amt = 1800
+		}
+	} else {
+		// 30% of atk per stack, max of 2700
+		amt = totalAtk * c2A1PercentBuff * float64(c.a1stacks.Count())
+		if amt > c2A1FlatDmg {
+			amt = a1FlatDmg
+		}
 	}
 	atk.Info.FlatDmg += amt
 	c.Core.Log.NewEvent("a1 adding flat dmg", glog.LogCharacterEvent, c.Index).
