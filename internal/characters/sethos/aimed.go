@@ -40,6 +40,16 @@ func init() {
 }
 
 func (c *char) Aimed(p map[string]int) (action.Info, error) {
+	rrCancel, ok := p["rr_cancel"]
+	if ok && rrCancel > 0 {
+		return action.Info{
+			Frames:          func(next action.Action) int { return 3 },
+			AnimationLength: 3,
+			CanQueueAfter:   3,
+			State:           action.AimState,
+		}, nil
+	}
+
 	hold, ok := p["hold"]
 	if !ok {
 		// is this a good default? it's gonna take 6s to do without energy
@@ -137,7 +147,7 @@ func (c *char) ShadowPierce(p map[string]int) (action.Info, error) {
 			ICDGroup:             attacks.ICDGroupDefault,
 			StrikeType:           attacks.StrikeTypePierce,
 			Element:              attributes.Electro,
-			Durability:           25,
+			Durability:           50,
 			Mult:                 shadowpierceAtk[c.TalentLvlAttack()],
 			HitWeakPoint:         weakspot == 1,
 			HitlagHaltFrames:     hitHaltFrames,
@@ -148,11 +158,11 @@ func (c *char) ShadowPierce(p map[string]int) (action.Info, error) {
 		}
 
 		if c.StatusIsActive(a4Key) {
-			ai.FlatDmg += 6 * em
+			ai.FlatDmg += 7 * em
 			c.Core.Log.NewEvent("Sethos A4 proc dmg add", glog.LogPreDamageMod, c.Index).
 				Write("em", em).
-				Write("ratio", 6.0).
-				Write("addition", 6*em)
+				Write("ratio", 7.0).
+				Write("addition", 7*em)
 		}
 
 		deltaPos := c.Core.Combat.Player().Pos().Sub(c.Core.Combat.PrimaryTarget().Pos())
