@@ -452,21 +452,21 @@ var (
 	}
 	// skill: skillStateDuration = [11]
 	skillStateDuration = []float64{
-		9,
-		9,
-		9,
-		9,
-		9,
-		9,
-		9,
-		9,
-		9,
-		9,
-		9,
-		9,
-		9,
-		9,
-		9,
+		7.5,
+		7.5,
+		7.5,
+		7.5,
+		7.5,
+		7.5,
+		7.5,
+		7.5,
+		7.5,
+		7.5,
+		7.5,
+		7.5,
+		7.5,
+		7.5,
+		7.5,
 	}
 	// burst: burstBOL = [1]
 	burstBOL = []float64{
