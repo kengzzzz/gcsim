@@ -49,12 +49,12 @@ func (c *char) Init() error {
 	return nil
 }
 
-func (c *char) NextQueueItemIsValid(a action.Action, p map[string]int) error {
+func (c *char) NextQueueItemIsValid(k keys.Char, a action.Action, p map[string]int) error {
 	// can use charge without attack beforehand unlike most of the other polearm users
 	if a == action.ActionCharge {
 		return nil
 	}
-	return c.Character.NextQueueItemIsValid(a, p)
+	return c.Character.NextQueueItemIsValid(k, a, p)
 }
 
 func (c *char) AnimationStartDelay(k model.AnimationDelayKey) int {
