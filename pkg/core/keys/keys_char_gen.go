@@ -11,6 +11,7 @@ const (
 	Alhaitham
 	Aloy
 	Amber
+	Arlecchino
 	Ayaka
 	Ayato
 	Baizhu
@@ -108,6 +109,10 @@ func init() {
 	charNames[Amber] = "amber"
 	charPrettyName[Amber] = "Amber"
 	CharKeyToEle[Amber] = attributes.Pyro
+
+	charNames[Arlecchino] = "arlecchino"
+	charPrettyName[Arlecchino] = "Arlecchino"
+	CharKeyToEle[Arlecchino] = attributes.Pyro
 
 	charNames[Ayaka] = "ayaka"
 	charPrettyName[Ayaka] = "Ayaka"
