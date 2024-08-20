@@ -6,12 +6,10 @@ const (
 	ICDTagCharlotteMark
 	ICDTagCharlotteKamera
 	ICDTagChioriSkill
-	ICDTagClorindeCons
 	ICDTagColleiSprout
 	ICDTagCynoBolt
 	ICDTagDoriC2
 	ICDTagDoriChargingStation
-	ICDTagEmilieLumidouce
 	ICDTagFurinaChevalmarin
 	ICDTagFurinaUsher
 	ICDTagKleeFireDamage
