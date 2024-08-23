@@ -87,11 +87,15 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 func (c *char) sharkBite(p map[string]int) action.Info {
 	c.NormalCounter = 0
 	c.SetCDWithDelay(action.ActionAttack, 1.8*60, 0)
+	c.momentumSrc = c.Core.F
+	c.QueueCharTask(c.momentumStackGain(c.momentumSrc), sharkBiteFrames[0][action.ActionSwap])
+	momentumStacks := c.momentumStacks
+	c.momentumStacks = 0
 	c.QueueCharTask(func() {
-		mult := bite[c.TalentLvlSkill()] + momentumBonus[c.TalentLvlSkill()]*float64(c.momentumStacks) + c.c1()
+		mult := bite[c.TalentLvlSkill()] + momentumBonus[c.TalentLvlSkill()]*float64(momentumStacks) + c.c1()
 		ai := combat.AttackInfo{
 			ActorIndex: c.Index,
-			Abil:       fmt.Sprintf("Sharky's Bite (%v momentum)", c.momentumStacks),
+			Abil:       fmt.Sprintf("Sharky's Bite (%v momentum)", momentumStacks),
 			AttackTag:  attacks.AttackTagNormal,
 			ICDTag:     attacks.ICDTagNone,
 			ICDGroup:   attacks.ICDGroupDefault,
@@ -100,7 +104,7 @@ func (c *char) sharkBite(p map[string]int) action.Info {
 			Durability: 25,
 		}
 
-		if c.momentumStacks >= 3 {
+		if momentumStacks >= 3 {
 			ai.Abil = "Sharky's Surging Bite"
 			mult += surgingBite[c.TalentLvlSkill()]
 		}
@@ -153,7 +157,6 @@ func (c *char) sharkBite(p map[string]int) action.Info {
 				20,
 			)
 		}
-		c.momentumStacks = 0
 	}, sharkBiteHitmarks)
 
 	return action.Info{

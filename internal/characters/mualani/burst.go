@@ -25,6 +25,10 @@ func init() {
 }
 
 func (c *char) Burst(p map[string]int) (action.Info, error) {
+	if c.nightsoulPoints > 0 {
+		c.momentumSrc = c.Core.F
+		c.QueueCharTask(c.momentumStackGain(c.momentumSrc), burstFrames[action.ActionDash])
+	}
 	ai := combat.AttackInfo{
 		ActorIndex: c.Index,
 		Abil:       "Stormburst Shot",

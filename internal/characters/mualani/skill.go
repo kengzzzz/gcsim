@@ -117,7 +117,8 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 		c.nightsoulPoints = 60
 		c.nightsoulSrc = c.Core.F
 		c.QueueCharTask(c.nightsoulPointReduceFunc(c.nightsoulSrc), 6)
-		c.QueueCharTask(c.momentumStackGain(c.nightsoulSrc), 0)
+		c.momentumSrc = c.Core.F
+		c.QueueCharTask(c.momentumStackGain(c.momentumSrc), 0)
 	}, skillDelay)
 
 	return action.Info{
