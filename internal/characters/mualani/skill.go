@@ -45,6 +45,7 @@ func (c *char) cancelNightsoul() {
 	c.SetCDWithDelay(action.ActionSkill, 6*60, 0)
 	c.ResetActionCooldown(action.ActionAttack)
 	c.momentumStacks = 0
+	c.momentumSrc = -1
 	c.nightsoulPoints = 0
 	c.nightsoulSrc = -1
 }
@@ -69,6 +70,10 @@ func (c *char) nightsoulPointReduceFunc(src int) func() {
 func (c *char) momentumStackGain(src int) func() {
 	return func() {
 		if c.momentumSrc != src {
+			return
+		}
+
+		if c.nightsoulPoints <= 0 {
 			return
 		}
 
