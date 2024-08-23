@@ -71,6 +71,12 @@ func (c *char) momentumStackGain(src int) func() {
 		if c.nightsoulSrc != src {
 			return
 		}
+
+		if c.Core.Player.Active() != c.Index {
+			c.QueueCharTask(c.momentumStackGain(src), 0.7*60)
+			return
+		}
+
 		ap := combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 1.0)
 		enemies := c.Core.Combat.Enemies()
 		enemiesCollided := 0
