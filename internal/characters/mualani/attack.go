@@ -153,6 +153,7 @@ func (c *char) sharkBite(p map[string]int) action.Info {
 				20,
 			)
 		}
+		c.momentumStacks = 0
 	}, sharkBiteHitmarks)
 
 	return action.Info{
