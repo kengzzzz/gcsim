@@ -42,13 +42,13 @@ func init() {
 
 	sharkBiteFrames = make([][]int, 4)
 
-	sharkBiteFrames[0] = frames.InitNormalCancelSlice(sharkBiteHitmarks[0], 40)
+	sharkBiteFrames[0] = frames.InitAbilSlice(40)
 
-	sharkBiteFrames[1] = frames.InitNormalCancelSlice(sharkBiteHitmarks[1], 40)
+	sharkBiteFrames[1] = frames.InitAbilSlice(40)
 
-	sharkBiteFrames[2] = frames.InitNormalCancelSlice(sharkBiteHitmarks[2], 40)
+	sharkBiteFrames[2] = frames.InitAbilSlice(40)
 
-	sharkBiteFrames[3] = frames.InitNormalCancelSlice(sharkBiteHitmarks[3], 81)
+	sharkBiteFrames[3] = frames.InitAbilSlice(81)
 }
 
 func (c *char) Attack(p map[string]int) (action.Info, error) {
@@ -95,7 +95,8 @@ func (c *char) sharkBite(p map[string]int) action.Info {
 	momentumStacks := c.momentumStacks
 	c.momentumStacks = 0
 
-	c.QueueCharTask(c.momentumStackGain(c.momentumSrc), sharkBiteFrames[momentumStacks][action.ActionSwap]+stackDelayAfterBite)
+	nextMomentumFrame := max(c.lastStackFrame+0.7*60-c.Core.F, sharkBiteFrames[momentumStacks][action.ActionSwap]+stackDelayAfterBite)
+	c.QueueCharTask(c.momentumStackGain(c.momentumSrc), nextMomentumFrame)
 	c.QueueCharTask(func() {
 		mult := bite[c.TalentLvlSkill()] + momentumBonus[c.TalentLvlSkill()]*float64(momentumStacks) + c.c1()
 		ai := combat.AttackInfo{

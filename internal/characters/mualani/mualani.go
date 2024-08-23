@@ -24,6 +24,7 @@ type char struct {
 	nightsoulPoints int
 	nightsoulSrc    int
 	momentumStacks  int
+	lastStackFrame  int
 	momentumSrc     int
 	a4Stacks        int
 	c1Done          bool

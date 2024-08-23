@@ -68,7 +68,7 @@ func (c *char) nightsoulPointReduceFunc(src int) func() {
 
 func (c *char) momentumStackGain(src int) func() {
 	return func() {
-		if c.nightsoulSrc != src {
+		if c.momentumSrc != src {
 			return
 		}
 
@@ -92,6 +92,7 @@ func (c *char) momentumStackGain(src int) func() {
 				enemiesCollided++
 			}
 		}
+		c.lastStackFrame = c.Core.F
 		c.momentumStacks = min(c.momentumStacks+enemiesCollided, 3.0)
 		c.QueueCharTask(c.momentumStackGain(src), 0.7*60)
 	}
