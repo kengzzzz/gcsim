@@ -47,5 +47,5 @@ func (c *char) a4amount() float64 {
 	}
 	s := c.a4Stacks
 	c.a4Stacks = 0
-	return 0.15 * float64(s)
+	return 0.15 * float64(s) * c.MaxHP()
 }

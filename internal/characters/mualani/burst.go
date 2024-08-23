@@ -34,7 +34,8 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 		StrikeType: attacks.StrikeTypeDefault,
 		Element:    attributes.Hydro,
 		Durability: 25,
-		Mult:       burst[c.TalentLvlBurst()],
+		Mult:       0,
+		FlatDmg:    burst[c.TalentLvlBurst()] * c.MaxHP(),
 	}
 	skillArea := combat.NewCircleHitOnTarget(c.Core.Combat.Player(), geometry.Point{Y: 6}, 6.5)
 
