@@ -19,7 +19,7 @@ var (
 	attackHitboxes = []float64{1.0, 1.0, 1.5}
 
 	sharkBiteFrames      [][]int
-	sharkBiteHitmarks    = 19
+	sharkBiteHitmarks    = []int{2, 2, 2, 42}
 	sharkBiteHitboxes    = 1.0
 	sharkMissileHitboxes = 5.0
 )
@@ -39,11 +39,15 @@ func init() {
 	attackFrames[2][action.ActionWalk] = 61
 	attackFrames[2][action.ActionCharge] = 51
 
-	sharkBiteFrames = make([][]int, 1)
+	sharkBiteFrames = make([][]int, 4)
 
-	sharkBiteFrames[0] = frames.InitNormalCancelSlice(sharkBiteHitmarks, 36)
-	sharkBiteFrames[0][action.ActionAttack] = 61
-	sharkBiteFrames[0][action.ActionCharge] = 51
+	sharkBiteFrames[0] = frames.InitNormalCancelSlice(sharkBiteHitmarks[0], 42)
+
+	sharkBiteFrames[1] = frames.InitNormalCancelSlice(sharkBiteHitmarks[1], 42)
+
+	sharkBiteFrames[2] = frames.InitNormalCancelSlice(sharkBiteHitmarks[2], 42)
+
+	sharkBiteFrames[3] = frames.InitNormalCancelSlice(sharkBiteHitmarks[3], 84)
 }
 
 func (c *char) Attack(p map[string]int) (action.Info, error) {
@@ -88,9 +92,10 @@ func (c *char) sharkBite(p map[string]int) action.Info {
 	c.NormalCounter = 0
 	c.SetCDWithDelay(action.ActionAttack, 1.8*60, 0)
 	c.momentumSrc = c.Core.F
-	c.QueueCharTask(c.momentumStackGain(c.momentumSrc), sharkBiteFrames[0][action.ActionSwap])
 	momentumStacks := c.momentumStacks
 	c.momentumStacks = 0
+
+	c.QueueCharTask(c.momentumStackGain(c.momentumSrc), sharkBiteFrames[momentumStacks][action.ActionSwap])
 	c.QueueCharTask(func() {
 		mult := bite[c.TalentLvlSkill()] + momentumBonus[c.TalentLvlSkill()]*float64(momentumStacks) + c.c1()
 		ai := combat.AttackInfo{
@@ -157,12 +162,12 @@ func (c *char) sharkBite(p map[string]int) action.Info {
 				20,
 			)
 		}
-	}, sharkBiteHitmarks)
+	}, sharkBiteHitmarks[momentumStacks])
 
 	return action.Info{
-		Frames:          frames.NewAttackFunc(c.Character, sharkBiteFrames),
-		AnimationLength: sharkBiteFrames[0][action.InvalidAction],
-		CanQueueAfter:   sharkBiteFrames[0][action.ActionSwap],
+		Frames:          frames.NewAbilFunc(sharkBiteFrames[momentumStacks]),
+		AnimationLength: sharkBiteFrames[momentumStacks][action.InvalidAction],
+		CanQueueAfter:   sharkBiteFrames[momentumStacks][action.ActionSwap],
 		State:           action.NormalAttackState,
 	}
 }
