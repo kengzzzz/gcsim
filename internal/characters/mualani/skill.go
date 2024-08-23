@@ -117,7 +117,7 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 	c.QueueCharTask(func() {
 		// set to high value so that `if .mualani.status.nightblessing` will work
 		c.AddStatus(nightblessing, 99999, true)
-
+		c.DeleteStatus(particleICDKey)
 		c.a1Count = 0
 		c.c1Done = false
 		c.c2()
