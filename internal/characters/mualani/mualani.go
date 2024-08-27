@@ -10,6 +10,7 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/info"
 	"github.com/genshinsim/gcsim/pkg/core/keys"
 	"github.com/genshinsim/gcsim/pkg/core/player/character"
+	"github.com/genshinsim/gcsim/pkg/model"
 )
 
 func init() {
@@ -100,4 +101,16 @@ func (c *char) Condition(fields []string) (any, error) {
 	default:
 		return c.Character.Condition(fields)
 	}
+}
+
+func (c *char) AnimationStartDelay(k model.AnimationDelayKey) int {
+	if c.nightsoulPoints > 0 && c.momentumStacks >= 3 {
+		switch k {
+		case model.AnimationXingqiuN0StartDelay:
+			return 33
+		default:
+			return 30
+		}
+	}
+	return c.Character.AnimationStartDelay(k)
 }
