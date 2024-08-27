@@ -93,11 +93,11 @@ func (c *char) sharkBite(p map[string]int) action.Info {
 	c.NormalCounter = 0
 	c.momentumSrc = c.Core.F
 	momentumStacks := c.momentumStacks
-	c.momentumStacks = 0
 
 	nextMomentumFrame := max(c.lastStackFrame+0.7*60-c.Core.F, sharkBiteFrames[momentumStacks][action.ActionSwap]+stackDelayAfterBite)
 	c.QueueCharTask(c.momentumStackGain(c.momentumSrc), nextMomentumFrame)
 	c.QueueCharTask(func() {
+		c.momentumStacks = 0
 		mult := bite[c.TalentLvlSkill()] + momentumBonus[c.TalentLvlSkill()]*float64(momentumStacks) + c.c1()
 		ai := combat.AttackInfo{
 			ActorIndex: c.Index,
