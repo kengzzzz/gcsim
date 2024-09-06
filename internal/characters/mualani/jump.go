@@ -5,7 +5,7 @@ import (
 )
 
 func (c *char) Jump(p map[string]int) (action.Info, error) {
-	if c.nightsoulPoints > 0 {
+	if c.nightsoulState.HasBlessing() {
 		if c.Core.Player.LastAction.Type == action.ActionDash {
 			c.reduceNightsoulPoints(14) // total 24, 10 from dash, 14 from dash jump
 		} else {

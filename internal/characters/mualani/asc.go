@@ -2,6 +2,7 @@ package mualani
 
 import (
 	"github.com/genshinsim/gcsim/pkg/core/combat"
+	"github.com/genshinsim/gcsim/pkg/core/event"
 	"github.com/genshinsim/gcsim/pkg/core/targets"
 )
 
@@ -25,8 +26,9 @@ func (c *char) a1cb() combat.AttackCBFunc {
 		done = true
 		c.a1Count++
 		c.QueueCharTask(func() {
-			if c.nightsoulPoints > 0 {
-				c.nightsoulPoints += 20
+			if c.nightsoulState.HasBlessing() {
+				pointsGain := min(c.nightsoulState.Points()+20, 60) - c.nightsoulState.Points()
+				c.nightsoulState.GeneratePoints(pointsGain)
 				c.c2puffer()
 				c.c4puffer()
 			}
@@ -38,8 +40,10 @@ func (c *char) a4() {
 	if c.Base.Ascension < 4 {
 		return
 	}
-	// TODO: subscribe to nightsoul burst
-	c.a4Stacks = max(c.a4Stacks+1, 3)
+	c.Core.Events.Subscribe(event.OnNightsoulBurst, func(args ...interface{}) bool {
+		c.a4Stacks = min(c.a4Stacks+1, 3)
+		return false
+	}, "maulani-a4")
 }
 func (c *char) a4amount() float64 {
 	if c.Base.Ascension < 1 {

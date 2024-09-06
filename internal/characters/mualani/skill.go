@@ -14,9 +14,6 @@ const (
 	particleICD    = 9999 * 60
 	particleICDKey = "mualani-particle-icd"
 
-	nightblessing = "nightblessing"
-
-	// momentumStackICDKey = "momentum-icd"
 	markedAsPreyKey = "markedAsPrey"
 	markedAsPreyDur = 10 * 60
 	skillDelay      = 21
@@ -33,20 +30,19 @@ func init() {
 	// skill -> skill is unknown
 }
 
-func (c *char) reduceNightsoulPoints(val int) {
-	c.nightsoulPoints = max(c.nightsoulPoints-val, 0)
-	if c.nightsoulPoints <= 0 {
+func (c *char) reduceNightsoulPoints(val float64) {
+	c.nightsoulState.ConsumePoints(val)
+	if c.nightsoulState.Points() <= 0.00001 {
 		c.cancelNightsoul()
 	}
 }
 
 func (c *char) cancelNightsoul() {
-	c.DeleteStatus(nightblessing)
+	c.nightsoulState.ExitBlessing()
 	c.SetCDWithDelay(action.ActionSkill, 6*60, 0)
 	c.ResetActionCooldown(action.ActionAttack)
 	c.momentumStacks = 0
 	c.momentumSrc = -1
-	c.nightsoulPoints = 0
 	c.nightsoulSrc = -1
 }
 
@@ -56,7 +52,7 @@ func (c *char) nightsoulPointReduceFunc(src int) func() {
 			return
 		}
 
-		if c.nightsoulPoints <= 0 {
+		if !c.nightsoulState.HasBlessing() {
 			return
 		}
 
@@ -73,7 +69,7 @@ func (c *char) momentumStackGain(src int) func() {
 			return
 		}
 
-		if c.nightsoulPoints <= 0 {
+		if !c.nightsoulState.HasBlessing() {
 			return
 		}
 
@@ -104,7 +100,7 @@ func (c *char) momentumStackGain(src int) func() {
 }
 
 func (c *char) Skill(p map[string]int) (action.Info, error) {
-	if c.nightsoulPoints > 0 {
+	if c.nightsoulState.HasBlessing() {
 		c.cancelNightsoul()
 		return action.Info{
 			Frames:          func(_ action.Action) int { return 1 },
@@ -116,12 +112,11 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 
 	c.QueueCharTask(func() {
 		// set to high value so that `if .mualani.status.nightblessing` will work
-		c.AddStatus(nightblessing, 99999, true)
+		c.nightsoulState.EnterBlessing(60)
 		c.DeleteStatus(particleICDKey)
 		c.a1Count = 0
 		c.c1Done = false
 		c.c2()
-		c.nightsoulPoints = 60
 		c.nightsoulSrc = c.Core.F
 		c.QueueCharTask(c.nightsoulPointReduceFunc(c.nightsoulSrc), 6)
 		c.momentumSrc = c.Core.F

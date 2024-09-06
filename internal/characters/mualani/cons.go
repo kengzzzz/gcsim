@@ -41,7 +41,7 @@ func (c *char) c2puffer() {
 	if c.a1Count == 2 {
 		for i := 0; i < 12; i++ {
 			c.QueueCharTask(func() {
-				c.nightsoulPoints++
+				c.nightsoulState.GeneratePoints(1)
 			}, i*10+10)
 		}
 	}

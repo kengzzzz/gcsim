@@ -52,7 +52,7 @@ func init() {
 }
 
 func (c *char) Attack(p map[string]int) (action.Info, error) {
-	if c.nightsoulPoints > 0 {
+	if c.nightsoulState.HasBlessing() {
 		return c.sharkBite(p), nil
 	}
 
