@@ -13,8 +13,6 @@ var endLag []int
 
 const shortChargeHitmark = 27
 
-const chargeJudgementName = "Charged Attack: Equitable Judgment"
-
 func init() {
 	chargeFrames = frames.InitAbilSlice(87)
 	chargeFrames[action.ActionCharge] = 69
