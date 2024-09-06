@@ -89,7 +89,7 @@ func (c *char) Attack(p map[string]int) (action.Info, error) {
 	}, nil
 }
 
-func (c *char) sharkBite(p map[string]int) action.Info {
+func (c *char) sharkBite(_ map[string]int) action.Info {
 	c.NormalCounter = 0
 	c.momentumSrc = c.Core.F
 	momentumStacks := c.momentumStacks
