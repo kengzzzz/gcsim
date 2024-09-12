@@ -44,8 +44,8 @@ export function Simulator({
         them. The following are characters/weapons/artifacts currently not
         implemented in gcsim that we have added here:
         <ul className="list-disc pl-4">
-          <li>Arlecchino</li>
-          <li>Clorinde</li>
+          <li>Xilonen</li>
+          <li>Mualani</li>
           <li>Sethos</li>
         </ul>
         <p className=" font-bold">
