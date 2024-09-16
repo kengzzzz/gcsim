@@ -2,6 +2,7 @@ package xilonen
 
 import (
 	"fmt"
+	"slices"
 
 	"github.com/genshinsim/gcsim/pkg/core/action"
 	"github.com/genshinsim/gcsim/pkg/core/attacks"
@@ -9,12 +10,16 @@ import (
 	"github.com/genshinsim/gcsim/pkg/core/combat"
 	"github.com/genshinsim/gcsim/pkg/core/event"
 	"github.com/genshinsim/gcsim/pkg/core/glog"
+	"github.com/genshinsim/gcsim/pkg/core/info"
 	"github.com/genshinsim/gcsim/pkg/core/player/character"
 	"github.com/genshinsim/gcsim/pkg/modifier"
 )
 
 const c2key = "xilonen-c2"
 const c4key = "xilonen-c4"
+const c6key = "xilonen-c6"
+const c6IcdKey = "xilonen-c6-icd"
+const c6StamKey = "xilonen-c6-stam"
 
 func (c *char) c1DurMod() float64 {
 	if c.Base.Cons < 1 {
@@ -37,16 +42,16 @@ var c2BuffCryo []float64
 
 func c2buffsInit() {
 	c2BuffGeo = make([]float64, attributes.EndStatType)
-	c2BuffGeo[attributes.DmgP] = 0.4
+	c2BuffGeo[attributes.DmgP] = 0.50
 
 	c2BuffPyro = make([]float64, attributes.EndStatType)
-	c2BuffPyro[attributes.ATKP] = 0.4
+	c2BuffPyro[attributes.ATKP] = 0.45
 
 	c2BuffHydro = make([]float64, attributes.EndStatType)
-	c2BuffHydro[attributes.HPP] = 0.4
+	c2BuffHydro[attributes.HPP] = 0.45
 
 	c2BuffCryo = make([]float64, attributes.EndStatType)
-	c2BuffCryo[attributes.CD] = 0.5
+	c2BuffCryo[attributes.CD] = 0.60
 }
 
 func (c *char) c2buff() {
@@ -112,7 +117,9 @@ func (c *char) c2() {
 	if c.Base.Cons < 2 {
 		return
 	}
-	c.c2GeoSampler()()
+	if slices.Contains(c.shredElements, attributes.Geo) {
+		c.c2GeoSampler()()
+	}
 	c.c2buff()
 }
 
@@ -122,8 +129,8 @@ func (c *char) c2electro() {
 	}
 	for _, ch := range c.Core.Player.Chars() {
 		if ch.Base.Element == attributes.Electro {
-			ch.AddEnergy(c2key, 20)
-			ch.ReduceActionCooldown(action.ActionBurst, 5*60)
+			ch.AddEnergy(c2key, 25)
+			ch.ReduceActionCooldown(action.ActionBurst, 6*60)
 		}
 	}
 }
@@ -174,4 +181,78 @@ func (c *char) c4Init() {
 
 		return false
 	}, fmt.Sprintf("%s-hook", c4key))
+}
+
+func (c *char) c6() {
+	if c.Base.Cons < 6 {
+		return
+	}
+
+	if c.StatusIsActive(c6IcdKey) {
+		return
+	}
+
+	if !c.nightsoulState.HasBlessing() {
+		return
+	}
+
+	c.AddStatus(c6key, 5*60, true)
+	c.AddStatus(c6IcdKey, 15*60, true)
+	c.c6activated = true
+
+	src := c.nightsoulSrc
+	cancelTime := c.StatusDuration(skillMaxDurKey) + 5*60
+	c.QueueCharTask(func() {
+		if c.nightsoulSrc != src {
+			return
+		}
+		c.exitNightsoul()
+	}, cancelTime)
+	c.AddStatus(skillMaxDurKey, cancelTime, true)
+
+	c.QueueCharTask(func() {
+		if !c.nightsoulState.HasBlessing() {
+			return
+		}
+		if c.nightsoulState.Points() < maxNightsoulPoints {
+			return
+		}
+		c.a1MaxPoints()
+	}, 5*60)
+
+	for i := 0; i < 4; i++ {
+		hpplus := c.HealBonus()
+		heal := c.TotalDef() * 1.2
+		c.Core.Tasks.Add(func() {
+			c.Core.Player.Heal(info.HealInfo{
+				Caller:  c.Index,
+				Target:  -1,
+				Message: "Xilonen C6 Healing",
+				Src:     heal,
+				Bonus:   hpplus,
+			})
+		}, i*90)
+	}
+}
+
+func (c *char) c6Stam() {
+	if c.Base.Cons < 6 {
+		return
+	}
+	c.Core.Player.AddStamPercentMod(c6StamKey, -1, func(a action.Action) (float64, bool) {
+		if c.StatusIsActive(c6key) {
+			return -1, false
+		}
+		return 0, false
+	})
+}
+
+func (c *char) c6DmgMult() float64 {
+	if c.Base.Cons < 6 {
+		return 0.0
+	}
+	if !c.StatusIsActive(c6key) {
+		return 0.0
+	}
+	return 3.0
 }

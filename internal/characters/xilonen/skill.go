@@ -2,6 +2,7 @@ package xilonen
 
 import (
 	"fmt"
+	"slices"
 
 	"github.com/genshinsim/gcsim/internal/frames"
 	"github.com/genshinsim/gcsim/pkg/core/action"
@@ -17,6 +18,7 @@ var skillFrames []int
 
 const skillStart = 2
 const skillHitmarks = 13
+const skillMaxDurKey = "xilonen-e-limit"
 const particleICDKey = "xilonen-particle-icd"
 const samplerShredKey = "xilonen-e-shred"
 const activeSamplerKey = "xilonen-samplers-activated"
@@ -44,22 +46,30 @@ func (c *char) enterNightsoul() {
 	c.QueueCharTask(c.nightsoulPointReduceFunc(c.nightsoulSrc), interval)
 	c.NormalHitNum = rollerHitNum
 
+	c.c6activated = false
 	src := c.nightsoulSrc
 	duration := int(9 * 60 * c.c1DurMod())
 	c.QueueCharTask(func() {
 		if c.nightsoulSrc != src {
 			return
 		}
+		if c.c6activated {
+			return
+		}
 		c.exitNightsoul()
 	}, duration)
+	c.AddStatus(skillMaxDurKey, duration, true)
 
 	// Don't queue the task if C2 or higher
-	if c.Base.Cons < 2 {
-		c.activeGeoSampler(src)
+	if c.Base.Cons < 2 && slices.Contains(c.shredElements, attributes.Geo) {
+		c.activeGeoSampler(c.nightsoulSrc)()
 	}
 }
 
 func (c *char) exitNightsoul() {
+	if !c.nightsoulState.HasBlessing() {
+		return
+	}
 	c.nightsoulState.ExitBlessing()
 	c.nightsoulSrc = -1
 	c.NormalHitNum = normalHitNum
@@ -77,12 +87,15 @@ func (c *char) nightsoulPointReduceFunc(src int) func() {
 			return
 		}
 
-		// RODO: is this check needed? The nightsoulSrc gets reset on on exiting NS state
+		// TODO: is this check needed? The nightsoulSrc gets reset on on exiting NS state
 		// if !c.nightsoulState.HasBlessing() {
 		// 	return
 		// }
 
-		c.reduceNightsoulPoints(1)
+		if !c.StatusIsActive(c6key) {
+			c.reduceNightsoulPoints(1)
+		}
+
 		interval := int(12.0 * c.c1IntervalMod())
 		// reduce 1 point per 12f, which is 5 per second
 		c.QueueCharTask(c.nightsoulPointReduceFunc(src), interval)
@@ -125,6 +138,10 @@ func (c *char) activeSamplers(src int) func() {
 		enemies := c.Core.Combat.EnemiesWithinArea(combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 10), nil)
 
 		for _, ele := range c.shredElements {
+			// skip geo when C2 or above since it's always active
+			if c.Base.Cons >= 2 && ele == attributes.Geo {
+				continue
+			}
 			c.applySamplerShred(ele, enemies)
 		}
 

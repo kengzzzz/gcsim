@@ -7,6 +7,7 @@ import (
 	"github.com/genshinsim/gcsim/internal/template/nightsoul"
 	"github.com/genshinsim/gcsim/pkg/core"
 	"github.com/genshinsim/gcsim/pkg/core/attributes"
+	"github.com/genshinsim/gcsim/pkg/core/event"
 	"github.com/genshinsim/gcsim/pkg/core/glog"
 	"github.com/genshinsim/gcsim/pkg/core/info"
 	"github.com/genshinsim/gcsim/pkg/core/keys"
@@ -27,6 +28,7 @@ type char struct {
 	sampleSrc         int
 	samplersConverted int
 	shredElements     []attributes.Element
+	c6activated       bool
 }
 
 func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) error {
@@ -85,7 +87,27 @@ func (c *char) Init() error {
 	c.c2()
 	c.c4Init()
 
+	c.c6Stam()
+
+	c.onExitField()
 	return nil
+}
+
+func (c *char) onExitField() {
+	c.Core.Events.Subscribe(event.OnCharacterSwap, func(args ...interface{}) bool {
+		prev := args[0].(int)
+		if prev != c.Index {
+			return false
+		}
+
+		if !c.nightsoulState.HasBlessing() {
+			return false
+		}
+
+		c.exitNightsoul()
+		c.DeleteStatus(c6key)
+		return false
+	}, "xilonen-exit")
 }
 
 func (c *char) Condition(fields []string) (any, error) {
