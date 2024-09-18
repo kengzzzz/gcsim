@@ -187,6 +187,7 @@ var WeaponNameToKey = map[string]keys.Weapon{
 	"otherworldlystory":               keys.OtherworldlyStory,
 	"otherworldly":                    keys.OtherworldlyStory,
 	"peakpatrolsong":                  keys.PeakPatrolSong,
+	"pps":                             keys.PeakPatrolSong,
 	"pocketgrimoire":                  keys.PocketGrimoire,
 	"pocket":                          keys.PocketGrimoire,
 	"polarstar":                       keys.PolarStar,
