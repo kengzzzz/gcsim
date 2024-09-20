@@ -39,12 +39,13 @@ func NewWeapon(c *core.Core, char *character.CharWrapper, p info.WeaponProfile) 
 	w := &Weapon{}
 	r := float64(p.Refine)
 
-	d := make([]float64, attributes.EndStatType)
-	b := make([]float64, attributes.EndStatType)
+	m := make([]float64, attributes.EndStatType)
+	t := make([]float64, attributes.EndStatType)
 
-	def := 0.045 + 0.015*r
-	bonusMulti := 0.09 + 0.03*r
-	maxBonus := 0.27 + 0.09*r
+	selfDef := 0.06 + 0.02*r
+	selfBonus := 0.075 + 0.025*r
+	teamBonus := 0.06 + 0.02*r
+	maxTeamBonus := 0.192 + 0.064*r
 
 	c.Events.Subscribe(event.OnEnemyDamage, func(args ...interface{}) bool {
 		atk := args[1].(*combat.AttackEvent)
@@ -65,26 +66,30 @@ func NewWeapon(c *core.Core, char *character.CharWrapper, p info.WeaponProfile) 
 			w.stacks++
 		}
 
-		d[attributes.DEFP] = def * float64(w.stacks)
+		stacks := float64(w.stacks)
+		m[attributes.DEFP] = selfDef * stacks
+		bonus := selfBonus * stacks
+		for i := attributes.PyroP; i <= attributes.DendroP; i++ {
+			m[i] = bonus
+		}
 		char.AddStatMod(character.StatMod{
-			Base:         modifier.NewBaseWithHitlag(buffKey, buffDur),
-			AffectedStat: attributes.DEFP,
+			Base: modifier.NewBaseWithHitlag(buffKey, buffDur),
 			Amount: func() ([]float64, bool) {
-				return d, true
+				return m, true
 			},
 		})
 
 		if w.stacks == 2 {
-			bonus := bonusMulti * char.TotalDef() / 1000.0
-			bonus = min(bonus, maxBonus)
+			bonus := teamBonus * char.TotalDef() / 1000.0
+			bonus = min(bonus, maxTeamBonus)
 			for i := attributes.PyroP; i <= attributes.DendroP; i++ {
-				b[i] = bonus
+				t[i] = bonus
 			}
 			for _, this := range c.Player.Chars() {
 				this.AddStatMod(character.StatMod{
 					Base: modifier.NewBaseWithHitlag(teamBuffKey, teamBuffDur),
 					Amount: func() ([]float64, bool) {
-						return b, true
+						return t, true
 					},
 				})
 			}
