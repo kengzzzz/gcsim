@@ -38,6 +38,7 @@ const (
 	ICDGroupYaoyaoRadishBurst
 	ICDGroupYelanBreakthrough
 	ICDGroupYelanBurst
+	ICDGroupCitlaliItzpapa
 	ICDGroupLength
 )
 
@@ -181,4 +182,8 @@ func init() {
 	ICDGroupResetTimer[ICDGroupYelanBurst] = 120
 	ICDGroupEleApplicationSequence[ICDGroupYelanBurst] = []float64{1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0}
 	ICDGroupDamageSequence[ICDGroupYelanBurst] = []float64{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+
+	ICDGroupResetTimer[ICDGroupCitlaliItzpapa] = 120
+	ICDGroupEleApplicationSequence[ICDGroupCitlaliItzpapa] = []float64{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+	ICDGroupDamageSequence[ICDGroupCitlaliItzpapa] = []float64{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
 }

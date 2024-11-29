@@ -31,5 +31,6 @@ const (
 	ICDTagYanfeiFire
 	ICDTagYelanBreakthrough
 	ICDTagYelanBurst
+	ICDTagCitlaliItzpapa
 	ICDTagLength
 )
