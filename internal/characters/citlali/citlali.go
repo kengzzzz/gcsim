@@ -27,6 +27,7 @@ type char struct {
 	itzpapaSrc       int
 	skillShield      *shd
 	numStellarBlades int
+	consumedPoints   float64
 }
 
 func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) error {
@@ -47,6 +48,7 @@ func (c *char) Init() error {
 	c.a1()
 	c.a4()
 	c.c1()
+	c.c6()
 	return nil
 }
 func (c *char) Condition(fields []string) (any, error) {
