@@ -23,6 +23,7 @@ func init() {
 	skillFrames = frames.InitAbilSlice(49) // E -> Q
 }
 func (c *char) Skill(p map[string]int) (action.Info, error) {
+	c.consumedPoints = 0
 	ai := combat.AttackInfo{
 		ActorIndex:     c.Index,
 		Abil:           "Obsidian Tzitzimitl DMG",
@@ -51,6 +52,7 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 		c.numStellarBlades = 10
 		c.c2()
 	}
+	c.c6Buff()
 	return action.Info{
 		Frames:          frames.NewAbilFunc(skillFrames),
 		AnimationLength: skillFrames[action.InvalidAction],
@@ -60,15 +62,20 @@ func (c *char) Skill(p map[string]int) (action.Info, error) {
 }
 func (c *char) ActivateItzpapa(src int) {
 	// try to activate Itzpapa each time Citlali gains NS points to avoid event subscribtion
-	if c.nightsoulState.Points() >= 50 {
+	if c.nightsoulState.Points() >= 50 || c.Base.Cons >= 6 {
+		if c.Base.Cons >= 6 {
+			c.nightsoulState.ConsumePoints(c.nightsoulState.Points())
+		}
+
 		// if it's activation or REactivation
 		if !c.StatusIsActive(itzpapaKey) || src != c.itzpapaSrc {
 			// this status is active only when Itzpapa is in "attack mode"
-			c.AddStatus(itzpapaKey, -1, false)
+			c.AddStatus(itzpapaKey, 20*60, false)
 			c.QueueCharTask(c.ItzpapaHit(src), itzpapaInterval)
 		}
 	}
 }
+
 func (c *char) ItzpapaHit(src int) func() {
 	return func() {
 		if src != c.itzpapaSrc {
@@ -77,7 +84,7 @@ func (c *char) ItzpapaHit(src int) func() {
 		if !c.StatusIsActive(itzpapaKey) {
 			return
 		}
-		if c.nightsoulState.Points() == 0 {
+		if c.nightsoulState.Points() == 0 && c.Base.Cons < 6 {
 			c.nightsoulState.ExitBlessing()
 			c.DeleteStatus(itzpapaKey)
 			c.numStellarBlades = 0 // C1

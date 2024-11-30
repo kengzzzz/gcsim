@@ -85,3 +85,37 @@ func (c *char) c4Skull() {
 	c.Core.QueueAttack(aiSpiritVesselSkull, combat.NewSingleTargetHit(c.Core.Combat.PrimaryTarget().Key()),
 		spiritVesselSkullHitmark-iceStormHitmark, spiritVesselSkullHitmark-iceStormHitmark)
 }
+
+func (c *char) c6() {
+	if c.Base.Cons < 6 {
+		return
+	}
+	c.Core.Events.Subscribe(event.OnNightsoulConsume, func(args ...interface{}) bool {
+		idx := args[0].(int)
+		amount := args[1].(float64)
+		if c.Index != idx {
+			return false
+		}
+		c.consumedPoints += amount
+		return false
+	}, "citlali-c6-ns-consume")
+}
+
+func (c *char) c6Buff() {
+	if c.Base.Cons < 6 {
+		return
+	}
+	m := make([]float64, attributes.EndStatType)
+	chars := c.Core.Player.Chars()
+	for _, char := range chars {
+		char.AddStatMod(character.StatMod{
+			Base: modifier.NewBase("citlali-c6-bonus", -1),
+			Amount: func() ([]float64, bool) {
+				m[attributes.PyroP] = min(0.015*c.consumedPoints, 0.6)
+				m[attributes.CryoP] = min(0.015*c.consumedPoints, 0.6)
+				m[attributes.HydroP] = min(0.015*c.consumedPoints, 0.6)
+				return m, true
+			},
+		})
+	}
+}
