@@ -88,6 +88,7 @@ func (c *char) ItzpapaHit(src int) func() {
 			c.nightsoulState.ExitBlessing()
 			c.DeleteStatus(itzpapaKey)
 			c.numStellarBlades = 0 // C1
+			c.consumedPoints = 0
 			return
 		}
 		ai := combat.AttackInfo{

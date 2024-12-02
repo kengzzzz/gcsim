@@ -40,7 +40,7 @@ func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) er
 	c.HasArkhe = false
 	w.Character = &c
 	c.nightsoulState = nightsoul.New(s, w)
-	c.nightsoulState.MaxPoints = 80 // TODO: the REAL one
+	c.nightsoulState.MaxPoints = 100 // TODO: the REAL one
 	c.itzpapaSrc = -1
 	return nil
 }

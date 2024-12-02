@@ -79,8 +79,9 @@ func (c *char) c4Skull() {
 		StrikeType:     attacks.StrikeTypeDefault,
 		Element:        attributes.Cryo,
 		Durability:     25,
-		FlatDmg:        12 * c.NonExtraStat(attributes.EM),
+		FlatDmg:        18 * c.NonExtraStat(attributes.EM),
 	}
+	c.AddEnergy("citlali-c4-energy", 8)
 	// TODO: the actual hitmark
 	c.Core.QueueAttack(aiSpiritVesselSkull, combat.NewSingleTargetHit(c.Core.Combat.PrimaryTarget().Key()),
 		spiritVesselSkullHitmark-iceStormHitmark, spiritVesselSkullHitmark-iceStormHitmark)
@@ -112,10 +113,16 @@ func (c *char) c6Buff() {
 			Base: modifier.NewBase("citlali-c6-bonus", -1),
 			Amount: func() ([]float64, bool) {
 				m[attributes.PyroP] = min(0.015*c.consumedPoints, 0.6)
-				m[attributes.CryoP] = min(0.015*c.consumedPoints, 0.6)
 				m[attributes.HydroP] = min(0.015*c.consumedPoints, 0.6)
 				return m, true
 			},
 		})
 	}
+	c.AddStatMod(character.StatMod{
+		Base: modifier.NewBase("citlali-c6-bonus", -1),
+		Amount: func() ([]float64, bool) {
+			m[attributes.DmgP] = min(0.025*c.consumedPoints, 1)
+			return m, true
+		},
+	})
 }

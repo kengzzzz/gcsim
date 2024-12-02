@@ -67,7 +67,7 @@ func (c *char) a4Dmg(abil string) float64 {
 	}
 	em := c.NonExtraStat(attributes.EM)
 	if abil == iceStormAbil {
-		return 24 * em
+		return 12 * em
 	}
 	if abil == frostFallAbil {
 		return 0.9 * em
