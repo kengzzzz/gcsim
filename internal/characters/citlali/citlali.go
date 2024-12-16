@@ -7,7 +7,9 @@ package citlali
 // C4 has no ICD.
 // NA is default.
 // CA has no ICD.
+
 // 5 particles on initial E hit
+
 import (
 	tmpl "github.com/genshinsim/gcsim/internal/template/character"
 	"github.com/genshinsim/gcsim/internal/template/nightsoul"
@@ -27,30 +29,39 @@ type char struct {
 	itzpapaSrc       int
 	skillShield      *shd
 	numStellarBlades int
-	consumedPoints   float64
+	numC6Stacks      int
 }
 
 func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) error {
 	c := char{}
 	c.Character = tmpl.NewWithWrapper(s, w)
+
 	c.EnergyMax = 60
 	c.NormalHitNum = 3
 	c.SkillCon = 3
 	c.BurstCon = 5
 	c.HasArkhe = false
+
 	w.Character = &c
+
 	c.nightsoulState = nightsoul.New(s, w)
 	c.nightsoulState.MaxPoints = 80 // TODO: the REAL one
+
 	c.itzpapaSrc = -1
+	c.numC6Stacks = 0
+
 	return nil
 }
+
 func (c *char) Init() error {
 	c.a1()
 	c.a4()
+
 	c.c1()
 	c.c6()
 	return nil
 }
+
 func (c *char) Condition(fields []string) (any, error) {
 	switch fields[0] {
 	case "nightsoul":

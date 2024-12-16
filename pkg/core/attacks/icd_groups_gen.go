@@ -15,6 +15,7 @@ const (
 	ICDGroupChascaBurst
 	ICDGroupChevreuseBurstMines
 	ICDGroupChioriSkill
+	ICDGroupCitlaliSkill
 	ICDGroupClorindeElementalArt
 	ICDGroupColleiBurst
 	ICDGroupCynoBolt
@@ -42,7 +43,6 @@ const (
 	ICDGroupYaoyaoRadishBurst
 	ICDGroupYelanBreakthrough
 	ICDGroupYelanBurst
-	ICDGroupCitlaliItzpapa
 	ICDGroupLength
 )
 
@@ -94,6 +94,10 @@ func init() {
 	ICDGroupResetTimer[ICDGroupChioriSkill] = 114
 	ICDGroupEleApplicationSequence[ICDGroupChioriSkill] = []float64{1, 0, 0, 0, 0}
 	ICDGroupDamageSequence[ICDGroupChioriSkill] = []float64{1, 1, 1, 1, 1}
+
+	ICDGroupResetTimer[ICDGroupCitlaliSkill] = 120
+	ICDGroupEleApplicationSequence[ICDGroupCitlaliSkill] = []float64{1, 0}
+	ICDGroupDamageSequence[ICDGroupCitlaliSkill] = []float64{1, 1}
 
 	ICDGroupResetTimer[ICDGroupClorindeElementalArt] = 60
 	ICDGroupEleApplicationSequence[ICDGroupClorindeElementalArt] = []float64{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
@@ -202,8 +206,4 @@ func init() {
 	ICDGroupResetTimer[ICDGroupYelanBurst] = 120
 	ICDGroupEleApplicationSequence[ICDGroupYelanBurst] = []float64{1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0}
 	ICDGroupDamageSequence[ICDGroupYelanBurst] = []float64{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
-
-	ICDGroupResetTimer[ICDGroupCitlaliItzpapa] = 120
-	ICDGroupEleApplicationSequence[ICDGroupCitlaliItzpapa] = []float64{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-	ICDGroupDamageSequence[ICDGroupCitlaliItzpapa] = []float64{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
 }

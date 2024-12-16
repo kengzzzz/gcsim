@@ -35,24 +35,19 @@ type char struct {
 func init() {
 	core.RegisterCharFunc(keys.Mavuika, NewChar)
 }
-
 func NewChar(s *core.Core, w *character.CharWrapper, _ info.CharacterProfile) error {
 	c := char{}
 	t := tmpl.New(s)
-
 	t.CharWrapper = w
 	c.Character = t
-
 	c.EnergyMax = 0
 	c.BurstCon = 3
 	c.SkillCon = 5
 	c.NormalHitNum = normalHitNum
-
 	w.Character = &c
 	c.nightsoulState = nightsoul.New(c.Core, c.CharWrapper)
 	return nil
 }
-
 func (c *char) Init() error {
 	c.onExitField()
 	c.burstInit()
@@ -60,10 +55,8 @@ func (c *char) Init() error {
 	c.c1Init()
 	c.c2Init()
 	c.a4Init()
-
 	return nil
 }
-
 func (c *char) ActionStam(a action.Action, p map[string]int) float64 {
 	if c.armamentState == bike && c.nightsoulState.HasBlessing() {
 		switch a {
@@ -73,15 +66,14 @@ func (c *char) ActionStam(a action.Action, p map[string]int) float64 {
 			return 0
 		}
 	}
-
 	if a == action.ActionCharge {
 		return 50
 	}
 	return c.Character.ActionStam(a, p)
 }
-
 func (c *char) ActionReady(a action.Action, p map[string]int) (bool, action.Failure) {
-	if a == action.ActionBurst {
+	switch a {
+	case action.ActionBurst:
 		if c.fightingSpirit < 100 {
 			return false, action.InsufficientEnergy
 		}
@@ -89,10 +81,14 @@ func (c *char) ActionReady(a action.Action, p map[string]int) (bool, action.Fail
 			return false, action.BurstCD
 		}
 		return true, action.NoFailure
+	case action.ActionSkill:
+		if p["recast"] != 0 {
+			return !c.StatusIsActive(skillRecastCDKey), action.SkillCD
+		}
+		return c.Character.ActionReady(a, p)
 	}
 	return c.Character.ActionReady(a, p)
 }
-
 func (c *char) onExitField() {
 	c.Core.Events.Subscribe(event.OnCharacterSwap, func(_ ...interface{}) bool {
 		c.DeleteStatus(burstKey)
@@ -102,7 +98,6 @@ func (c *char) onExitField() {
 		return false
 	}, "mavuika-exit")
 }
-
 func (c *char) AnimationStartDelay(k model.AnimationDelayKey) int {
 	switch k {
 	case model.AnimationXingqiuN0StartDelay:
