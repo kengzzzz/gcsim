@@ -18,10 +18,8 @@ var lowPlungeFrames []int
 const lowPlungeHitmark = 38
 const highPlungeHitmark = 41
 const collisionHitmark = lowPlungeHitmark - 6
-
 const lowPlungePoiseDMG = 150.0
 const lowPlungeRadius = 3.0
-
 const highPlungePoiseDMG = 200.0
 const highPlungeRadius = 5.0
 
@@ -34,7 +32,6 @@ func init() {
 	lowPlungeFrames[action.ActionDash] = lowPlungeHitmark
 	lowPlungeFrames[action.ActionWalk] = 79
 	lowPlungeFrames[action.ActionSwap] = 62
-
 	// high_plunge -> x
 	highPlungeFrames = frames.InitAbilSlice(83)
 	highPlungeFrames[action.ActionAttack] = 54
@@ -57,17 +54,14 @@ func (c *char) LowPlungeAttack(p map[string]int) (action.Info, error) {
 		return action.Info{}, errors.New("low_plunge can only be used while airborne")
 	}
 }
-
 func (c *char) lowPlungeXY(p map[string]int) action.Info {
 	collision, ok := p["collision"]
 	if !ok {
 		collision = 0 // Whether or not collision hit
 	}
-
 	if collision > 0 {
 		c.plungeCollision(collisionHitmark)
 	}
-
 	ai := combat.AttackInfo{
 		ActorIndex: c.Index,
 		Abil:       "Low Plunge",
@@ -86,7 +80,6 @@ func (c *char) lowPlungeXY(p map[string]int) action.Info {
 		lowPlungeHitmark,
 		lowPlungeHitmark,
 	)
-
 	return action.Info{
 		Frames:          frames.NewAbilFunc(lowPlungeFrames),
 		AnimationLength: lowPlungeFrames[action.InvalidAction],
@@ -107,17 +100,14 @@ func (c *char) HighPlungeAttack(p map[string]int) (action.Info, error) {
 		return action.Info{}, errors.New("high_plunge can only be used while airborne")
 	}
 }
-
 func (c *char) highPlungeXY(p map[string]int) action.Info {
 	collision, ok := p["collision"]
 	if !ok {
 		collision = 0 // Whether or not collision hit
 	}
-
 	if collision > 0 {
 		c.plungeCollision(collisionHitmark)
 	}
-
 	ai := combat.AttackInfo{
 		ActorIndex: c.Index,
 		Abil:       "High Plunge",
@@ -136,7 +126,6 @@ func (c *char) highPlungeXY(p map[string]int) action.Info {
 		highPlungeHitmark,
 		highPlungeHitmark,
 	)
-
 	return action.Info{
 		Frames:          frames.NewAbilFunc(highPlungeFrames),
 		AnimationLength: highPlungeFrames[action.InvalidAction],

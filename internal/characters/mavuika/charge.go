@@ -11,8 +11,8 @@ import (
 
 var chargeFrames []int
 var bikeChargeFrames []int
-var bikeChargeHitmarks = []int{52, 95, 138, 181, 224, 267, 310, 353}
-var bikeChargeFinalHitmark = 436
+var bikeChargeHitmarks = []int{51, 92, 133, 174, 215, 256, 297, 338, 379}
+var bikeChargeFinalHitmark = 420
 
 const chargeHitmark = 40
 
@@ -24,12 +24,12 @@ func init() {
 	chargeFrames[action.ActionSwap] = 50
 	chargeFrames[action.ActionWalk] = 60
 
-	bikeChargeFrames = frames.InitAbilSlice(446)
-	bikeChargeFrames[action.ActionBurst] = 456
+	bikeChargeFrames = frames.InitAbilSlice(430)
+	bikeChargeFrames[action.ActionBurst] = 440
 	bikeChargeFrames[action.ActionDash] = bikeChargeFinalHitmark
 	bikeChargeFrames[action.ActionJump] = bikeChargeFinalHitmark
-	bikeChargeFrames[action.ActionSwap] = 466
-	bikeChargeFrames[action.ActionWalk] = 486
+	bikeChargeFrames[action.ActionSwap] = 450
+	bikeChargeFrames[action.ActionWalk] = 470
 }
 
 func (c *char) ChargeAttack(p map[string]int) (action.Info, error) {

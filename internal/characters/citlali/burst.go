@@ -11,7 +11,8 @@ import (
 const (
 	iceStormHitmark          = 118
 	spiritVesselSkullHitmark = 223
-	iceStormAbil             = "Ice Storm DMG"
+
+	iceStormAbil = "Ice Storm DMG"
 )
 
 var (
@@ -21,6 +22,7 @@ var (
 func init() {
 	burstFrames = frames.InitAbilSlice(133) // Q -> Swap
 }
+
 func (c *char) Burst(p map[string]int) (action.Info, error) {
 	aiIceStorm := combat.AttackInfo{
 		ActorIndex:     c.Index,
@@ -50,12 +52,12 @@ func (c *char) Burst(p map[string]int) (action.Info, error) {
 	c.ConsumeEnergy(5)
 	c.SetCD(action.ActionBurst, 15*60)
 	c.nightsoulState.GeneratePoints(24)
-	c.ActivateItzpapa(c.itzpapaSrc)
+	c.tryEnterOpalFireState(c.itzpapaSrc)
 	c.Core.QueueAttack(aiIceStorm, combat.NewCircleHitOnTarget(c.Core.Combat.PrimaryTarget(), nil, 6.5), iceStormHitmark, iceStormHitmark)
 	enemies := c.Core.Combat.EnemiesWithinArea(combat.NewCircleHitOnTarget(c.Core.Combat.Player(), nil, 7), nil)
 	c.QueueCharTask(func() {
 		c.nightsoulState.GeneratePoints(float64(3 * len(enemies)))
-		c.ActivateItzpapa(c.itzpapaSrc)
+		c.tryEnterOpalFireState(c.itzpapaSrc)
 	}, spiritVesselSkullHitmark)
 	for _, enemy := range enemies {
 		c.Core.QueueAttack(aiSpiritVesselSkull, combat.NewSingleTargetHit(enemy.Key()), spiritVesselSkullHitmark, spiritVesselSkullHitmark)

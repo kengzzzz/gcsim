@@ -44,9 +44,8 @@ func (c *char) c2Init() {
 	if c.Base.Cons < 2 {
 		return
 	}
-	// this part doesn't actually work right now. So we also modify c.Base.Atk when entering or exiting Nightousl
 	m := make([]float64, attributes.EndStatType)
-	m[attributes.BaseATK] = 300
+	m[attributes.BaseATK] = 200
 	c.AddStatMod(character.StatMod{
 		Base: modifier.NewBase("mavuika-c2-base-atk", -1),
 		Amount: func() ([]float64, bool) {
@@ -56,20 +55,6 @@ func (c *char) c2Init() {
 			return nil, false
 		},
 	})
-}
-
-func (c *char) c2OnNightsoulEnter() {
-	// if c.Base.Cons < 2 {
-	// 	return
-	// }
-	// c.Base.Atk += 300
-}
-
-func (c *char) c2OnNightsoulExit() {
-	// if c.Base.Cons < 2 {
-	// 	return
-	// }
-	// c.Base.Atk -= 300
 }
 
 func (c *char) c2Ring() {
@@ -82,7 +67,7 @@ func (c *char) c2Ring() {
 	ap := combat.NewCircleHitOnTarget(
 		c.Core.Combat.Player(),
 		geometry.Point{Y: 1.0},
-		10,
+		6,
 	)
 	for _, e := range c.Core.Combat.EnemiesWithinArea(ap, nil) {
 		e.AddDefMod(combat.DefMod{
@@ -100,7 +85,7 @@ func (c *char) c2BikeNA() float64 {
 	if c.armamentState != bike {
 		return 0.0
 	}
-	return 0.8 * c.TotalAtk()
+	return 0.6 * c.TotalAtk()
 }
 func (c *char) c2BikeCA() float64 {
 	if c.Base.Cons < 2 {
@@ -109,7 +94,7 @@ func (c *char) c2BikeCA() float64 {
 	if c.armamentState != bike {
 		return 0.0
 	}
-	return 1.3 * c.TotalAtk()
+	return 0.9 * c.TotalAtk()
 }
 
 func (c *char) c2BikeQ() float64 {
@@ -119,7 +104,14 @@ func (c *char) c2BikeQ() float64 {
 	if c.armamentState != bike {
 		return 0.0
 	}
-	return 1.8 * c.TotalAtk()
+	return 1.2 * c.TotalAtk()
+}
+
+func (c *char) c4BonusVal() float64 {
+	if c.Base.Cons < 4 {
+		return 0.0
+	}
+	return 0.1
 }
 
 func (c *char) c4DecayRate() float64 {
@@ -200,7 +192,7 @@ func (c *char) c6RingAtk(src int) func() {
 			StrikeType:     attacks.StrikeTypePierce,
 			Element:        attributes.Pyro,
 			Durability:     0,
-			Mult:           4.0,
+			Mult:           5.0,
 		}
 		ap := combat.NewCircleHitOnTarget(
 			c.Core.Combat.Player(),

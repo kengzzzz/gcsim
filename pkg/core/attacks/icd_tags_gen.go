@@ -8,6 +8,7 @@ const (
 	ICDTagChascaShot
 	ICDTagChascaBurst
 	ICDTagChioriSkill
+	ICDTagCitlaliSpiritVessel
 	ICDTagClorindeCons
 	ICDTagColleiSprout
 	ICDTagCynoBolt
@@ -35,6 +36,5 @@ const (
 	ICDTagYanfeiFire
 	ICDTagYelanBreakthrough
 	ICDTagYelanBurst
-	ICDTagCitlaliItzpapa
 	ICDTagLength
 )
